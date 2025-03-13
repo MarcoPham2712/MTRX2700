@@ -7,53 +7,56 @@
 #include "initialise.s"
 
 .data
-@ Define variables
+
 string: .asciz "abcdefghijklmnopqrstuv\0"
 
 .text
 
-@ this is the entry function called from the startup file
-main:
+
+Vowels:
 	BL enable_peripheral_clocks
 	BL Set_LED_to_output
 	BL Set_button_input
 
 	LDR R0, =string
-	LDR R1, =0b0 //Letters
-	LDR R3, =0b0 //vowels
-	LDR R5, =0b0 //Switch Vowel/cons
+	LDR R1, =0b0 //Count Letters
+	LDR R3, =0b0 //Count vowels
+	LDR R5, =0b0 //Switch Vowel/Cons
 
 
 count_letters:
 	LDRB R2, [R0], #1    // After loading byte pointer is incremented by 1
     CMP R2, #0           // Check if reached the end of the string
     BEQ continue
-    ADD R1, #0b1
+    ADD R1, #0b1		// Add 1 to the letters counter
     B count_letters
 
 	continue:
-    	LDR R0, =string
+    	LDR R0, =string // Reload the string from the start
     	B lowercase
 
     lowercase:
         LDRB R4, [R0], #1    // After loading byte pointer is incremented by 1
         CMP R4, #0           // Check if reached the end of the string
         BEQ end_lowercase
+       // If less than 'A', it's not an uppercase letter
         CMP R4, #'A'
-        BLT lowercase       // If less than 'A', it's not an uppercase letter
+        BLT lowercase
+        // If greater than 'Z', it's not an uppercase letter
         CMP R4, #'Z'
-        BGT lowercase       // If greater than 'Z', it's not an uppercase letter
-        ADD R4, #32
-        SUB R0, #1     // Convert to lowercase by adding 32 (as shown in the ASCII table this converts to lowercase)
+        BGT lowercase
+        ADD R4, #32		// Convert to lowercase by adding 32 (as shown in the ASCII table this converts to lowercase)
+        SUB R0, #1
         STRB R4, [R0]   // Store the modified character at the point it was found
         B lowercase
 
 	end_lowercase:
-		LDR R0, =string
+		LDR R0, =string //Reload the string from the start
     	B count_vowels
 
     count_vowels:
-    	LDRB R2, [R0], #1
+    	LDRB R2, [R0], #1	// After loading byte pointer is incremented by 1
+    	//Check if the loaded byte is equal to a vowel, if so add 1 to R3 (vowel counter)
     	CMP R2, 'e'
     	BEQ add_vowel
     	CMP R2, 'i'
@@ -64,6 +67,7 @@ count_letters:
     	BEQ add_vowel
     	CMP R2, 'a'
     	BEQ add_vowel
+    	//Loop until end of the string (null terminator)
     	CMP R2, #0
     	BEQ end
     	B count_vowels
@@ -72,9 +76,12 @@ count_letters:
     	ADD R3, #0b1
     	B count_vowels
     end:
+    	//Subtract vowles from letters to get consonants count
     	SUB R1, R3
+    	//Set vowel LEDs first
     	B Set_Vowel_LED
 
+	//When button is pressed wait for it to be released before changing LEDs
     button_press:
 	LDR R0, = GPIOA
 	LDRB R4, [R0, #IDR]
@@ -87,6 +94,7 @@ count_letters:
 	BNE wait
 
 	toggle:
+	//When button is pressed toggle R5 to register either showing Vowels or Consonants
 	EOR R5, #0b1
 	CMP R5, #0b0
 	BEQ Set_Vowel_LED
@@ -94,13 +102,13 @@ count_letters:
 	BEQ Set_Cons_LED
 
     Set_Vowel_LED:
-	LDR R0, =GPIOE	@Load the address of the GPIOE register into R0
-	STRB R3, [R0, #ODR + 1]
+	LDR R0, =GPIOE	//Load the address of the GPIOE register into R0
+	STRB R3, [R0, #ODR + 1] //store the binary count of vowles in the LED output
 	B button_press
 
 	Set_Cons_LED:
-	LDR R0, =GPIOE	@Load the address of the GPIOE register into R0
-	STRB R1, [R0, #ODR + 1]
+	LDR R0, =GPIOE	//Load the address of the GPIOE register into R0
+	STRB R1, [R0, #ODR + 1] //Store the binary count of consonants in the LED output
 	B button_press
 
 

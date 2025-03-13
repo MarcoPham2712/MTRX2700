@@ -130,7 +130,7 @@ Set_button_input:
 
 .text
 
-@ this is the entry function called from the startup file
+
 main:
 	BL enable_peripheral_clocks
  80001fe:	f7ff ffe9 	bl	80001d4 <enable_peripheral_clocks>
@@ -141,11 +141,11 @@ main:
 
 	LDR R0, =string
  800020a:	4827      	ldr	r0, [pc, #156]	@ (80002a8 <Set_Cons_LED+0xe>)
-	LDR R1, =0b0 //Letters
+	LDR R1, =0b0 //Count Letters
  800020c:	f04f 0100 	mov.w	r1, #0
-	LDR R3, =0b0 //vowels
+	LDR R3, =0b0 //Count vowels
  8000210:	f04f 0300 	mov.w	r3, #0
-	LDR R5, =0b0 //Switch Vowel/cons
+	LDR R5, =0b0 //Switch Vowel/Cons
  8000214:	f04f 0500 	mov.w	r5, #0
 
 08000218 <count_letters>:
@@ -158,7 +158,7 @@ count_letters:
  800021c:	2a00      	cmp	r2, #0
     BEQ continue
  800021e:	d002      	beq.n	8000226 <continue>
-    ADD R1, #0b1
+    ADD R1, #0b1		// Add 1 to the letters counter
  8000220:	f101 0101 	add.w	r1, r1, #1
     B count_letters
  8000224:	e7f8      	b.n	8000218 <count_letters>
@@ -166,7 +166,7 @@ count_letters:
 08000226 <continue>:
 
 	continue:
-    	LDR R0, =string
+    	LDR R0, =string // Reload the string from the start
  8000226:	4820      	ldr	r0, [pc, #128]	@ (80002a8 <Set_Cons_LED+0xe>)
     	B lowercase
  8000228:	e7ff      	b.n	800022a <lowercase>
@@ -180,17 +180,19 @@ count_letters:
  800022e:	2c00      	cmp	r4, #0
         BEQ end_lowercase
  8000230:	d009      	beq.n	8000246 <end_lowercase>
+       // If less than 'A', it's not an uppercase letter
         CMP R4, #'A'
  8000232:	2c41      	cmp	r4, #65	@ 0x41
-        BLT lowercase       // If less than 'A', it's not an uppercase letter
+        BLT lowercase
  8000234:	dbf9      	blt.n	800022a <lowercase>
+        // If greater than 'Z', it's not an uppercase letter
         CMP R4, #'Z'
  8000236:	2c5a      	cmp	r4, #90	@ 0x5a
-        BGT lowercase       // If greater than 'Z', it's not an uppercase letter
+        BGT lowercase
  8000238:	dcf7      	bgt.n	800022a <lowercase>
-        ADD R4, #32
+        ADD R4, #32		// Convert to lowercase by adding 32 (as shown in the ASCII table this converts to lowercase)
  800023a:	f104 0420 	add.w	r4, r4, #32
-        SUB R0, #1     // Convert to lowercase by adding 32 (as shown in the ASCII table this converts to lowercase)
+        SUB R0, #1
  800023e:	f1a0 0001 	sub.w	r0, r0, #1
         STRB R4, [R0]   // Store the modified character at the point it was found
  8000242:	7004      	strb	r4, [r0, #0]
@@ -200,7 +202,7 @@ count_letters:
 08000246 <end_lowercase>:
 
 	end_lowercase:
-		LDR R0, =string
+		LDR R0, =string //Reload the string from the start
  8000246:	4818      	ldr	r0, [pc, #96]	@ (80002a8 <Set_Cons_LED+0xe>)
     	B count_vowels
  8000248:	e7ff      	b.n	800024a <count_vowels>
@@ -208,8 +210,9 @@ count_letters:
 0800024a <count_vowels>:
 
     count_vowels:
-    	LDRB R2, [R0], #1
+    	LDRB R2, [R0], #1	// After loading byte pointer is incremented by 1
  800024a:	f810 2b01 	ldrb.w	r2, [r0], #1
+    	//Check if the loaded byte is equal to a vowel, if so add 1 to R3 (vowel counter)
     	CMP R2, 'e'
  800024e:	2a65      	cmp	r2, #101	@ 0x65
     	BEQ add_vowel
@@ -230,6 +233,7 @@ count_letters:
  800025e:	2a61      	cmp	r2, #97	@ 0x61
     	BEQ add_vowel
  8000260:	d002      	beq.n	8000268 <add_vowel>
+    	//Loop until end of the string (null terminator)
     	CMP R2, #0
  8000262:	2a00      	cmp	r2, #0
     	BEQ end
@@ -247,13 +251,16 @@ count_letters:
 
 0800026e <end>:
     end:
+    	//Subtract vowles from letters to get consonants count
     	SUB R1, R3
  800026e:	eba1 0103 	sub.w	r1, r1, r3
+    	//Set vowel LEDs first
     	B Set_Vowel_LED
  8000272:	e00f      	b.n	8000294 <Set_Vowel_LED>
 
 08000274 <button_press>:
 
+	//When button is pressed wait for it to be released before changing LEDs
     button_press:
 	LDR R0, = GPIOA
  8000274:	f04f 4090 	mov.w	r0, #1207959552	@ 0x48000000
@@ -277,6 +284,7 @@ count_letters:
 08000288 <toggle>:
 
 	toggle:
+	//When button is pressed toggle R5 to register either showing Vowels or Consonants
 	EOR R5, #0b1
  8000288:	f085 0501 	eor.w	r5, r5, #1
 	CMP R5, #0b0
@@ -291,9 +299,9 @@ count_letters:
 08000294 <Set_Vowel_LED>:
 
     Set_Vowel_LED:
-	LDR R0, =GPIOE	@Load the address of the GPIOE register into R0
+	LDR R0, =GPIOE	//Load the address of the GPIOE register into R0
  8000294:	4803      	ldr	r0, [pc, #12]	@ (80002a4 <Set_Cons_LED+0xa>)
-	STRB R3, [R0, #ODR + 1]
+	STRB R3, [R0, #ODR + 1] //store the binary count of vowles in the LED output
  8000296:	7543      	strb	r3, [r0, #21]
 	B button_press
  8000298:	e7ec      	b.n	8000274 <button_press>
@@ -301,9 +309,9 @@ count_letters:
 0800029a <Set_Cons_LED>:
 
 	Set_Cons_LED:
-	LDR R0, =GPIOE	@Load the address of the GPIOE register into R0
+	LDR R0, =GPIOE	//Load the address of the GPIOE register into R0
  800029a:	4802      	ldr	r0, [pc, #8]	@ (80002a4 <Set_Cons_LED+0xa>)
-	STRB R1, [R0, #ODR + 1]
+	STRB R1, [R0, #ODR + 1] //Store the binary count of consonants in the LED output
  800029c:	7541      	strb	r1, [r0, #21]
 	B button_press
  800029e:	e7e9      	b.n	8000274 <button_press>
