@@ -1,0 +1,5 @@
+"./Src/case_converter_1a.o"
+"./Src/cipher_1c.o"
+"./Src/main.o"
+"./Src/palindrome_1b.o"
+"./Startup/startup_stm32f303vctx.o"

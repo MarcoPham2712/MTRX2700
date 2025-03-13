@@ -1,3 +1,5 @@
+.syntax unified
+.thumb
 
 /*
  * Checks if the string in register R1 is a palindrome
@@ -7,11 +9,13 @@
  */
 palindrome:
 	// Load the address of the string into R0
-	LDR R0, R1
+	MOV R0, R1
 
 	// Set R0 pointer to end of string
 	palindrome_loop_to_null:
-		CMP R0, #0x0
+		// Load string value into R2 and compare
+		LDRB R2, [R0]
+		CMP R2, #0x0
 		ADD R0, #0x1
 		BNE palindrome_loop_to_null
 
@@ -21,8 +25,8 @@ palindrome:
 	// Iterate pointers R1/R0 forward/backwards respectively until they pass
 	palindrome_loop_until_tested:
 		// Load and compare both characters
-		LDRB R2, R0
-		LDRB R3, R1
+		LDRB R2, [R0]
+		LDRB R3, [R1]
 		CMP R2, R3
 		BNE palindrome_fail
 
@@ -34,11 +38,11 @@ palindrome:
 
 	// Set R0 to 1 if string is a palindrome, else 0
 	palindrome_pass:
-		LDR R0, #0x1
+		LDR R0, =#0x1
 		BX LR
 
 	palindrome_fail:
-		LDR R0, #0x0
+		LDR R0, =#0x0
 		BX LR
 
 
