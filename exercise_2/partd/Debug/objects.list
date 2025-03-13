@@ -1,0 +1,4 @@
+"./Src/definitions.o"
+"./Src/initialise.o"
+"./Src/vowls.o"
+"./Startup/startup_stm32f303vctx.o"
