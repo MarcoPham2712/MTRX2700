@@ -10,7 +10,9 @@
 
 .global main
 
+#include "case_converter_1a.s"
 #include "palindrome_1b.s"
+#include "cipher_1c.s"
 
 .data
 
@@ -20,9 +22,14 @@ palindrome_string: .asciz "racecar"
 .text
 
 main:
+	// Test 1a
+	// TODO
 
 	// Test 1b
 	LDR R1, =hello_world_string
 	BL palindrome
 	LDR R1, =palindrome_string
 	BL palindrome
+
+	// Test 1c
+	// TODO
