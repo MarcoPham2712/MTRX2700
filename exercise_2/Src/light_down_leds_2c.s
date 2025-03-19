@@ -1,8 +1,6 @@
 .syntax unified
 .thumb
 
-.global main
-
 #include "definitions.s"
 #include "initialise.s"
 
@@ -10,7 +8,6 @@
 initial_led_state: .byte 0b00000000
 
 .text
-
 // Sets the LEDs from the bitmask stored in R3
 // Bitmask is anticlockwise from West LED
 set_led_state:
@@ -19,7 +16,6 @@ set_led_state:
 	STRB R3, [R1, #ODR + 1]
 
 	BX LR
-
 
 start_user_led_ripple:
 	LDR R3, =initial_led_state
@@ -66,12 +62,3 @@ user_led_ripple:
 	// Set LEDs and loop
 	BL set_led_state
 	B user_led_ripple
-
-main:
-	@ Branch with link to set the clocks for the I/O and UART
-	@ Once the clocks are started, need to initialise the discovery board I/O
-	BL enable_peripheral_clocks
-	BL initialise_discovery_board
-
-	B start_user_led_ripple
-

@@ -1,28 +1,14 @@
 .syntax unified
 .thumb
 
-.global main
-
 #include "definitions.s"
 #include "initialise.s"
 
-.data
-@ Define variables
-
 .text
-
-@ this is the entry function called from the startup file
-main:
-
-	@ Branch with link to set the clocks for the I/O and UART
-	BL enable_peripheral_clocks
-
-	@ Once the clocks are started, need to initialise the discovery board I/O
-	BL initialise_discovery_board
-
-	LDR R4, =0b00000000			@Clear bitmask
-
-program_loop:
+entry_2b:
+	LDR R4, =0b00000000 @ Clear bitmask
+	
+program_loop_2b:
 	LDR R0, =GPIOE		@Load the address of the GPIOE register into R0
 	STRB R4, [R0, #ODR + 1]		@Store this to the second byte of the ODR (bits 8 - 15)
 
@@ -31,8 +17,7 @@ program_loop:
 
 	@Check if button is pressed
 	TST R1, #1			@check the state of button
-	BEQ program_loop
-
+	BEQ program_loop_2b
 
 pressed:
 	LDR R1, [R0, IDR]	@Load the byte from input data register to port A
@@ -50,11 +35,10 @@ turn_on_LED:
 	LSL R4, R4, #1		@Left shift by 1
 	ORR R4, R4, #1		@Set last bit to 1
 
-	B program_loop 		@return to program_loop
-
+	B program_loop_2b	@return to program_loop
 
 reset:
 	MOV R4, #0		@Change bitmask to all off
-	B program_loop
+	B program_loop_2b
 
 

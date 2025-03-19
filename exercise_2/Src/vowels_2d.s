@@ -1,28 +1,16 @@
 .syntax unified
 .thumb
 
-.global main
-
 #include "definitions.s"
 #include "initialise.s"
 
 .data
 
-string: .asciz "abcde.fghi44jkl,mnopq1\0"
-
 .text
-
-
 Vowels:
-	BL enable_peripheral_clocks
-	BL Set_LED_to_output
-	BL Set_button_input
-
-	LDR R0, =string
 	LDR R1, =0b0 //Count Letters
 	LDR R3, =0b0 //Count vowels
 	LDR R5, =0b0 //Switch Vowel/Cons
-
 
 count_letters:
 	LDRB R2, [R0], #1    // After loading byte pointer is incremented by 1
@@ -52,7 +40,7 @@ Add_letter:
 	B count_letters
 
 	continue:
-    	LDR R0, =string // Reload the string from the start
+    	LDR R0, =test_string // Reload the string from the start
     	B lowercase
 
     lowercase:
@@ -71,7 +59,7 @@ Add_letter:
         B lowercase
 
 	end_lowercase:
-		LDR R0, =string //Reload the string from the start
+		LDR R0, =test_string //Reload the string from the start
     	B count_vowels
 
     count_vowels:
