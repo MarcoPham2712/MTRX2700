@@ -8,7 +8,7 @@
 
 .data
 
-string: .asciz "abcdefghijklmnopqrstuv\0"
+string: .asciz "abcde.fghi44jkl,mnopq1\0"
 
 .text
 
@@ -28,8 +28,28 @@ count_letters:
 	LDRB R2, [R0], #1    // After loading byte pointer is incremented by 1
     CMP R2, #0           // Check if reached the end of the string
     BEQ continue
-    ADD R1, #0b1		// Add 1 to the letters counter
-    B count_letters
+	B Checkif_letter
+
+Checkif_letter:
+//If character is less than 'A' it is not a letter
+	CMP   R2, #'A'
+    BLT count_letters
+//If character is greater than 'Z' could not be a letter
+    CMP   R2, #'Z'
+    BGT Check_lowercase
+
+Check_lowercase:
+//If character is less than 'a' and greater than 'Z' it is not a letter
+	CMP R2, #'a'
+	BLT count_letters
+//If character is greater than 'z' it is not a letter
+	CMP R2, #'z'
+	BGT count_letters
+	B Add_letter
+
+Add_letter:
+	ADD R1, #0b1        // Add 1 to the letters counter
+	B count_letters
 
 	continue:
     	LDR R0, =string // Reload the string from the start
