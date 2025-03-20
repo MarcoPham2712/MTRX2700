@@ -23,13 +23,14 @@ palindrome_string: .asciz "racecar"
 
 main:
 	// Test 1a
-	// TODO
+	B case_converter
 
 	// Test 1b
 	LDR R1, =hello_world_string
 	BL palindrome
+
 	LDR R1, =palindrome_string
 	BL palindrome
 
 	// Test 1c
-	// TODO
+	BL start_caesar_cipher
