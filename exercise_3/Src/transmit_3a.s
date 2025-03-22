@@ -1,6 +1,5 @@
 .syntax unified
 .thumb
-.global main
 #include "initialise.s"
 .data
 .align
@@ -13,7 +12,7 @@ terminator: .asciz "*"
 
 .text
 @ The initialization Settings enable and initialize some of the functions on the STM32 board
-main:
+transmit_main:
     BL initialise_power				@ Power on the STM32 board
     BL enable_peripheral_clocks		@ Initializes and peripheral clocks
     BL initialise_discovery_board	@ Initialize the board

@@ -5,21 +5,21 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .isr_vector   00000194  08000000  08000000  00001000  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  1 .text         00000264  08000194  08000194  00001194  2**2
+  1 .text         0000028c  08000194  08000194  00001194  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       00000000  080003f8  080003f8  0000203c  2**0
+  2 .rodata       00000000  08000420  08000420  0000203c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  3 .ARM.extab    00000000  080003f8  080003f8  0000203c  2**0
+  3 .ARM.extab    00000000  08000420  08000420  0000203c  2**0
                   CONTENTS
-  4 .ARM          00000000  080003f8  080003f8  0000203c  2**0
+  4 .ARM          00000000  08000420  08000420  0000203c  2**0
                   CONTENTS
-  5 .preinit_array 00000000  080003f8  080003f8  0000203c  2**0
+  5 .preinit_array 00000000  08000420  08000420  0000203c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  6 .init_array   00000004  080003f8  080003f8  000013f8  2**2
+  6 .init_array   00000004  08000420  08000420  00001420  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  7 .fini_array   00000004  080003fc  080003fc  000013fc  2**2
+  7 .fini_array   00000004  08000424  08000424  00001424  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  8 .data         0000003c  20000000  08000400  00002000  2**0
+  8 .data         0000003c  20000000  08000428  00002000  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   9 .ccmram       00000000  10000000  10000000  0000203c  2**0
                   CONTENTS
@@ -29,21 +29,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  12 .ARM.attributes 00000030  00000000  00000000  0000203c  2**0
                   CONTENTS, READONLY
- 13 .debug_line   00000172  00000000  00000000  0000206c  2**0
+ 13 .debug_line   0000017f  00000000  00000000  0000206c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_line_str 000000a0  00000000  00000000  000021de  2**0
+ 14 .debug_line_str 000000ac  00000000  00000000  000021eb  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_info   00000055  00000000  00000000  0000227e  2**0
+ 15 .debug_info   00000055  00000000  00000000  00002297  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_abbrev 00000038  00000000  00000000  000022d3  2**0
+ 16 .debug_abbrev 00000038  00000000  00000000  000022ec  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_aranges 00000048  00000000  00000000  00002310  2**3
+ 17 .debug_aranges 00000048  00000000  00000000  00002328  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00000099  00000000  00000000  00002358  2**0
+ 18 .debug_str    00000099  00000000  00000000  00002370  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_rnglists 00000019  00000000  00000000  000023f1  2**0
+ 19 .debug_rnglists 00000019  00000000  00000000  00002409  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  0000002c  00000000  00000000  0000240c  2**2
+ 20 .debug_frame  0000002c  00000000  00000000  00002424  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -62,7 +62,7 @@ Disassembly of section .text:
  80001aa:	bd10      	pop	{r4, pc}
  80001ac:	2000003c 	.word	0x2000003c
  80001b0:	00000000 	.word	0x00000000
- 80001b4:	080003e0 	.word	0x080003e0
+ 80001b4:	08000408 	.word	0x08000408
 
 080001b8 <frame_dummy>:
  80001b8:	b508      	push	{r3, lr}
@@ -74,7 +74,7 @@ Disassembly of section .text:
  80001c6:	bd08      	pop	{r3, pc}
  80001c8:	00000000 	.word	0x00000000
  80001cc:	20000040 	.word	0x20000040
- 80001d0:	080003e0 	.word	0x080003e0
+ 80001d0:	08000408 	.word	0x08000408
 
 080001d4 <case_converter>:
 ascii_string:  .asciz "EntP\0"    @ string (null-terminated)
@@ -85,9 +85,9 @@ case_converter:
     LDR   R0, =0                  @ 1 = convert to uppercase  0 = convert to lowercase
  80001d4:	f04f 0000 	mov.w	r0, #0
     LDR   R1, =ascii_string
- 80001d8:	4951      	ldr	r1, [pc, #324]	@ (8000320 <program_loop+0x2>)
+ 80001d8:	4959      	ldr	r1, [pc, #356]	@ (8000340 <program_loop+0x2>)
     LDR   R2, =string_buffer
- 80001da:	4a52      	ldr	r2, [pc, #328]	@ (8000324 <program_loop+0x6>)
+ 80001da:	4a5a      	ldr	r2, [pc, #360]	@ (8000344 <program_loop+0x6>)
     MOV   R3, #0                  @ R3 is the index pointer starts at 0
  80001dc:	f04f 0300 	mov.w	r3, #0
 
@@ -174,12 +174,12 @@ finish:
  8000220:	be00      	bkpt	0x0000
 
 08000222 <palindrome>:
- * R0 is used as a backwards iterating pointer
- * Result is stored in R0 (1 is palindrome, 0 is not)
- */
+// R0 is used as a backwards iterating pointer and then to return the result
+// R2 is used to test the character in R0
+// R3 is used to test the character in R1
+// Result is stored in R0 (1 is palindrome, 0 is not)
 palindrome:
-	// Load the address of the string into R0
-	MOV R0, R1
+	MOV R0, R1 // Load string from R1 into R0
  8000222:	4608      	mov	r0, r1
 
 08000224 <palindrome_loop_to_null>:
@@ -189,9 +189,9 @@ palindrome:
 		// Load string value into R2 and compare
 		LDRB R2, [R0]
  8000224:	7802      	ldrb	r2, [r0, #0]
-		CMP R2, #0x0
+		CMP R2, #0
  8000226:	2a00      	cmp	r2, #0
-		ADD R0, #0x1
+		ADD R0, #1
  8000228:	f100 0001 	add.w	r0, r0, #1
 		BNE palindrome_loop_to_null
  800022c:	d1fa      	bne.n	8000224 <palindrome_loop_to_null>
@@ -211,413 +211,454 @@ palindrome:
  8000234:	780b      	ldrb	r3, [r1, #0]
 		CMP R2, R3
  8000236:	429a      	cmp	r2, r3
-		BNE palindrome_fail
- 8000238:	d108      	bne.n	800024c <palindrome_fail>
+		BEQ continue_palindrome
+ 8000238:	d009      	beq.n	800024e <continue_palindrome>
+
+0800023a <palindrome_check_capital>:
+
+		palindrome_check_capital:
+			ADD R2, #32
+ 800023a:	f102 0220 	add.w	r2, r2, #32
+			CMP R2, R3
+ 800023e:	429a      	cmp	r2, r3
+			BEQ continue_palindrome
+ 8000240:	d005      	beq.n	800024e <continue_palindrome>
+
+08000242 <palindrome_check_capital2>:
+
+		palindrome_check_capital2:
+			ADD R3, #32
+ 8000242:	f103 0320 	add.w	r3, r3, #32
+			SUB R2, #32
+ 8000246:	f1a2 0220 	sub.w	r2, r2, #32
+			CMP R2, R3
+ 800024a:	429a      	cmp	r2, r3
+			BNE palindrome_fail
+ 800024c:	d108      	bne.n	8000260 <palindrome_fail>
+
+0800024e <continue_palindrome>:
 
 		// Iterate pointers until they pass
-		SUB R0, #0x1
- 800023a:	f1a0 0001 	sub.w	r0, r0, #1
-		ADD R1, #0x1
- 800023e:	f101 0101 	add.w	r1, r1, #1
-		CMP R0, R1
- 8000242:	4288      	cmp	r0, r1
-		BGT palindrome_loop_until_tested
- 8000244:	dcf5      	bgt.n	8000232 <palindrome_loop_until_tested>
+		continue_palindrome:
+			SUB R0, #0x1
+ 800024e:	f1a0 0001 	sub.w	r0, r0, #1
+			ADD R1, #0x1
+ 8000252:	f101 0101 	add.w	r1, r1, #1
+			CMP R0, R1
+ 8000256:	4288      	cmp	r0, r1
+			BGT palindrome_loop_until_tested
+ 8000258:	dceb      	bgt.n	8000232 <palindrome_loop_until_tested>
 
-08000246 <palindrome_pass>:
+0800025a <palindrome_pass>:
 
-	// Set R0 to 1 if string is a palindrome, else 0
+	// Return 1 if string is a palindrome, else 0
 	palindrome_pass:
-		LDR R0, =#0x1
- 8000246:	f04f 0001 	mov.w	r0, #1
+		MOV R0, #1
+ 800025a:	f04f 0001 	mov.w	r0, #1
 		BX LR
- 800024a:	4770      	bx	lr
+ 800025e:	4770      	bx	lr
 
-0800024c <palindrome_fail>:
+08000260 <palindrome_fail>:
 
 	palindrome_fail:
-		LDR R0, =#0x0
- 800024c:	f04f 0000 	mov.w	r0, #0
+		MOV R0, #0
+ 8000260:	f04f 0000 	mov.w	r0, #0
 		BX LR
- 8000250:	4770      	bx	lr
+ 8000264:	4770      	bx	lr
 
-08000252 <caesar_cipher>:
+08000266 <caesar_cipher>:
 // R3: 'A' or 'a' to indicate if cipher is upper/lower
 // R4: Result of division required for modulo operator
 // R5: Modulo divisor
 caesar_cipher:
 	// Register setup
 	POP {R0, R1} // Pop the cipher key and string from the stack
- 8000252:	bc03      	pop	{r0, r1}
+ 8000266:	bc03      	pop	{r0, r1}
 	SUB R1, #1   // Start before the string (because pre-increment loop)
- 8000254:	f1a1 0101 	sub.w	r1, r1, #1
+ 8000268:	f1a1 0101 	sub.w	r1, r1, #1
 	MOV R5, #26
- 8000258:	f04f 051a 	mov.w	r5, #26
+ 800026c:	f04f 051a 	mov.w	r5, #26
 
 	// Convert cipher key to positive value in range [0, 25]
 	SDIV R4, R0, R5
- 800025c:	fb90 f4f5 	sdiv	r4, r0, r5
+ 8000270:	fb90 f4f5 	sdiv	r4, r0, r5
 	MUL R4, R5
- 8000260:	fb05 f404 	mul.w	r4, r5, r4
+ 8000274:	fb05 f404 	mul.w	r4, r5, r4
 	SUB R0, R4
- 8000264:	eba0 0004 	sub.w	r0, r0, r4
+ 8000278:	eba0 0004 	sub.w	r0, r0, r4
 	CMP R0, #0 // Add 26 to negative values
- 8000268:	2800      	cmp	r0, #0
+ 800027c:	2800      	cmp	r0, #0
 	BGE cipher_next
- 800026a:	da00      	bge.n	800026e <cipher_next>
+ 800027e:	da00      	bge.n	8000282 <cipher_next>
 	ADD R0, R5
- 800026c:	4428      	add	r0, r5
+ 8000280:	4428      	add	r0, r5
 
-0800026e <cipher_next>:
+08000282 <cipher_next>:
 
 	cipher_next:
 		// Iterate string until terminating NULLL
 		LDRB R2, [R1, #1]!
- 800026e:	f811 2f01 	ldrb.w	r2, [r1, #1]!
+ 8000282:	f811 2f01 	ldrb.w	r2, [r1, #1]!
 		CMP R2, #0
- 8000272:	2a00      	cmp	r2, #0
+ 8000286:	2a00      	cmp	r2, #0
 		BEQ cipher_finish
- 8000274:	d017      	beq.n	80002a6 <cipher_finish>
+ 8000288:	d017      	beq.n	80002ba <cipher_finish>
 
 		// Ignore values before and after the alphabet
 		CMP R2, #'A'
- 8000276:	2a41      	cmp	r2, #65	@ 0x41
+ 800028a:	2a41      	cmp	r2, #65	@ 0x41
 		BLT cipher_next
- 8000278:	dbf9      	blt.n	800026e <cipher_next>
+ 800028c:	dbf9      	blt.n	8000282 <cipher_next>
 		CMP R2, #'z'
- 800027a:	2a7a      	cmp	r2, #122	@ 0x7a
+ 800028e:	2a7a      	cmp	r2, #122	@ 0x7a
 		BGT cipher_next
- 800027c:	dcf7      	bgt.n	800026e <cipher_next>
+ 8000290:	dcf7      	bgt.n	8000282 <cipher_next>
 
 		// Check if uppercase or lower case
 		CMP R2, #'Z'
- 800027e:	2a5a      	cmp	r2, #90	@ 0x5a
+ 8000292:	2a5a      	cmp	r2, #90	@ 0x5a
 		MOV R3, #'A'
- 8000280:	f04f 0341 	mov.w	r3, #65	@ 0x41
+ 8000294:	f04f 0341 	mov.w	r3, #65	@ 0x41
 		BLE perform_cipher
- 8000284:	dd03      	ble.n	800028e <perform_cipher>
+ 8000298:	dd03      	ble.n	80002a2 <perform_cipher>
 
 		CMP R2, #'a'
- 8000286:	2a61      	cmp	r2, #97	@ 0x61
+ 800029a:	2a61      	cmp	r2, #97	@ 0x61
 		MOV R3, #'a'
- 8000288:	f04f 0361 	mov.w	r3, #97	@ 0x61
+ 800029c:	f04f 0361 	mov.w	r3, #97	@ 0x61
 		BGE perform_cipher
- 800028c:	daff      	bge.n	800028e <perform_cipher>
+ 80002a0:	daff      	bge.n	80002a2 <perform_cipher>
 
-0800028e <perform_cipher>:
+080002a2 <perform_cipher>:
 
 	perform_cipher:
 		// Convert letter to a number [0, 25] and perform cipher
 		SUB R2, R3
- 800028e:	eba2 0203 	sub.w	r2, r2, r3
+ 80002a2:	eba2 0203 	sub.w	r2, r2, r3
 		ADD R2, R0
- 8000292:	4402      	add	r2, r0
+ 80002a6:	4402      	add	r2, r0
 
 		// Modulo operation (subtract highest multiple of 26)
 		UDIV R4, R2, R5
- 8000294:	fbb2 f4f5 	udiv	r4, r2, r5
+ 80002a8:	fbb2 f4f5 	udiv	r4, r2, r5
 		MUL R4, R5
- 8000298:	fb05 f404 	mul.w	r4, r5, r4
+ 80002ac:	fb05 f404 	mul.w	r4, r5, r4
 		SUB R2, R4
- 800029c:	eba2 0204 	sub.w	r2, r2, r4
+ 80002b0:	eba2 0204 	sub.w	r2, r2, r4
 
 		// Convert number back to letter of given case, store in R1
 		ADD R2, R3
- 80002a0:	441a      	add	r2, r3
+ 80002b4:	441a      	add	r2, r3
 		STRB R2, [R1]
- 80002a2:	700a      	strb	r2, [r1, #0]
+ 80002b6:	700a      	strb	r2, [r1, #0]
 		B cipher_next
- 80002a4:	e7e3      	b.n	800026e <cipher_next>
+ 80002b8:	e7e3      	b.n	8000282 <cipher_next>
 
-080002a6 <cipher_finish>:
+080002ba <cipher_finish>:
 
 	cipher_finish:
 		BX LR
- 80002a6:	4770      	bx	lr
+ 80002ba:	4770      	bx	lr
 
-080002a8 <main>:
-	// LDR R1, =palindrome_string
-	// BL palindrome
+080002bc <main>:
+main:
+	// Test 1a
+	// B case_converter
+
+	// Test 1b
+	LDR R1, =hello_world_string
+ 80002bc:	4922      	ldr	r1, [pc, #136]	@ (8000348 <program_loop+0xa>)
+	BL palindrome
+ 80002be:	f7ff ffb0 	bl	8000222 <palindrome>
+
+	LDR R1, =palindrome_string
+ 80002c2:	4922      	ldr	r1, [pc, #136]	@ (800034c <program_loop+0xe>)
+	BL palindrome
+ 80002c4:	f7ff ffad 	bl	8000222 <palindrome>
 
 	// Test 1c
 	// Basic test
 	LDR R0, =cipher_key
- 80002a8:	481f      	ldr	r0, [pc, #124]	@ (8000328 <program_loop+0xa>)
+ 80002c8:	4821      	ldr	r0, [pc, #132]	@ (8000350 <program_loop+0x12>)
 	LDRB R0, [R0]
- 80002aa:	7800      	ldrb	r0, [r0, #0]
+ 80002ca:	7800      	ldrb	r0, [r0, #0]
 	LDR R1, =cipher_string
- 80002ac:	491f      	ldr	r1, [pc, #124]	@ (800032c <program_loop+0xe>)
+ 80002cc:	4921      	ldr	r1, [pc, #132]	@ (8000354 <program_loop+0x16>)
 	PUSH {R0, R1}
- 80002ae:	b403      	push	{r0, r1}
+ 80002ce:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 80002b0:	f7ff ffcf 	bl	8000252 <caesar_cipher>
+ 80002d0:	f7ff ffc9 	bl	8000266 <caesar_cipher>
 
 	LDR R1, =cipher_string_1
- 80002b4:	491e      	ldr	r1, [pc, #120]	@ (8000330 <program_loop+0x12>)
+ 80002d4:	4920      	ldr	r1, [pc, #128]	@ (8000358 <program_loop+0x1a>)
 	PUSH {R0, R1}
- 80002b6:	b403      	push	{r0, r1}
+ 80002d6:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 80002b8:	f7ff ffcb 	bl	8000252 <caesar_cipher>
+ 80002d8:	f7ff ffc5 	bl	8000266 <caesar_cipher>
 
 	LDR R1, =cipher_string_2
- 80002bc:	491d      	ldr	r1, [pc, #116]	@ (8000334 <program_loop+0x16>)
+ 80002dc:	491f      	ldr	r1, [pc, #124]	@ (800035c <program_loop+0x1e>)
 	PUSH {R0, R1}
- 80002be:	b403      	push	{r0, r1}
+ 80002de:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 80002c0:	f7ff ffc7 	bl	8000252 <caesar_cipher>
+ 80002e0:	f7ff ffc1 	bl	8000266 <caesar_cipher>
 
 	// Negative (Decipher) test
 	LDR R0, =cipher_key_1
- 80002c4:	481c      	ldr	r0, [pc, #112]	@ (8000338 <program_loop+0x1a>)
+ 80002e4:	481e      	ldr	r0, [pc, #120]	@ (8000360 <program_loop+0x22>)
 	LDRSB R0, [R0]
- 80002c6:	f990 0000 	ldrsb.w	r0, [r0]
+ 80002e6:	f990 0000 	ldrsb.w	r0, [r0]
 	LDR R1, =cipher_string
- 80002ca:	4918      	ldr	r1, [pc, #96]	@ (800032c <program_loop+0xe>)
+ 80002ea:	491a      	ldr	r1, [pc, #104]	@ (8000354 <program_loop+0x16>)
 	PUSH {R0, R1}
- 80002cc:	b403      	push	{r0, r1}
+ 80002ec:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 80002ce:	f7ff ffc0 	bl	8000252 <caesar_cipher>
+ 80002ee:	f7ff ffba 	bl	8000266 <caesar_cipher>
 
 	LDR R1, =cipher_string_1
- 80002d2:	4917      	ldr	r1, [pc, #92]	@ (8000330 <program_loop+0x12>)
+ 80002f2:	4919      	ldr	r1, [pc, #100]	@ (8000358 <program_loop+0x1a>)
 	PUSH {R0, R1}
- 80002d4:	b403      	push	{r0, r1}
+ 80002f4:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 80002d6:	f7ff ffbc 	bl	8000252 <caesar_cipher>
+ 80002f6:	f7ff ffb6 	bl	8000266 <caesar_cipher>
 
 	LDR R1, =cipher_string_2
- 80002da:	4916      	ldr	r1, [pc, #88]	@ (8000334 <program_loop+0x16>)
+ 80002fa:	4918      	ldr	r1, [pc, #96]	@ (800035c <program_loop+0x1e>)
 	PUSH {R0, R1}
- 80002dc:	b403      	push	{r0, r1}
+ 80002fc:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 80002de:	f7ff ffb8 	bl	8000252 <caesar_cipher>
+ 80002fe:	f7ff ffb2 	bl	8000266 <caesar_cipher>
 
 	// Overflow test
 	LDR R0, =cipher_key_2
- 80002e2:	4816      	ldr	r0, [pc, #88]	@ (800033c <program_loop+0x1e>)
+ 8000302:	4818      	ldr	r0, [pc, #96]	@ (8000364 <program_loop+0x26>)
 	LDRSB R0, [R0]
- 80002e4:	f990 0000 	ldrsb.w	r0, [r0]
+ 8000304:	f990 0000 	ldrsb.w	r0, [r0]
 	LDR R1, =cipher_string
- 80002e8:	4910      	ldr	r1, [pc, #64]	@ (800032c <program_loop+0xe>)
+ 8000308:	4912      	ldr	r1, [pc, #72]	@ (8000354 <program_loop+0x16>)
 	PUSH {R0, R1}
- 80002ea:	b403      	push	{r0, r1}
+ 800030a:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 80002ec:	f7ff ffb1 	bl	8000252 <caesar_cipher>
+ 800030c:	f7ff ffab 	bl	8000266 <caesar_cipher>
 
 	LDR R1, =cipher_string_1
- 80002f0:	490f      	ldr	r1, [pc, #60]	@ (8000330 <program_loop+0x12>)
+ 8000310:	4911      	ldr	r1, [pc, #68]	@ (8000358 <program_loop+0x1a>)
 	PUSH {R0, R1}
- 80002f2:	b403      	push	{r0, r1}
+ 8000312:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 80002f4:	f7ff ffad 	bl	8000252 <caesar_cipher>
+ 8000314:	f7ff ffa7 	bl	8000266 <caesar_cipher>
 
 	LDR R1, =cipher_string_2
- 80002f8:	490e      	ldr	r1, [pc, #56]	@ (8000334 <program_loop+0x16>)
+ 8000318:	4910      	ldr	r1, [pc, #64]	@ (800035c <program_loop+0x1e>)
 	PUSH {R0, R1}
- 80002fa:	b403      	push	{r0, r1}
+ 800031a:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 80002fc:	f7ff ffa9 	bl	8000252 <caesar_cipher>
+ 800031c:	f7ff ffa3 	bl	8000266 <caesar_cipher>
 
 	// Negative overflow (decipher) test
 	LDR R0, =cipher_key_3
- 8000300:	480f      	ldr	r0, [pc, #60]	@ (8000340 <program_loop+0x22>)
+ 8000320:	4811      	ldr	r0, [pc, #68]	@ (8000368 <program_loop+0x2a>)
 	LDRSB R0, [R0]
- 8000302:	f990 0000 	ldrsb.w	r0, [r0]
+ 8000322:	f990 0000 	ldrsb.w	r0, [r0]
 	LDR R1, =cipher_string
- 8000306:	4909      	ldr	r1, [pc, #36]	@ (800032c <program_loop+0xe>)
+ 8000326:	490b      	ldr	r1, [pc, #44]	@ (8000354 <program_loop+0x16>)
 	PUSH {R0, R1}
- 8000308:	b403      	push	{r0, r1}
+ 8000328:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 800030a:	f7ff ffa2 	bl	8000252 <caesar_cipher>
+ 800032a:	f7ff ff9c 	bl	8000266 <caesar_cipher>
 
 	LDR R1, =cipher_string_1
- 800030e:	4908      	ldr	r1, [pc, #32]	@ (8000330 <program_loop+0x12>)
+ 800032e:	490a      	ldr	r1, [pc, #40]	@ (8000358 <program_loop+0x1a>)
 	PUSH {R0, R1}
- 8000310:	b403      	push	{r0, r1}
+ 8000330:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 8000312:	f7ff ff9e 	bl	8000252 <caesar_cipher>
+ 8000332:	f7ff ff98 	bl	8000266 <caesar_cipher>
 
 	LDR R1, =cipher_string_2
- 8000316:	4907      	ldr	r1, [pc, #28]	@ (8000334 <program_loop+0x16>)
+ 8000336:	4909      	ldr	r1, [pc, #36]	@ (800035c <program_loop+0x1e>)
 	PUSH {R0, R1}
- 8000318:	b403      	push	{r0, r1}
+ 8000338:	b403      	push	{r0, r1}
 	BL caesar_cipher
- 800031a:	f7ff ff9a 	bl	8000252 <caesar_cipher>
+ 800033a:	f7ff ff94 	bl	8000266 <caesar_cipher>
 
-0800031e <program_loop>:
+0800033e <program_loop>:
 
 program_loop:
 	B program_loop
- 800031e:	e7fe      	b.n	800031e <program_loop>
+ 800033e:	e7fe      	b.n	800033e <program_loop>
     LDR   R1, =ascii_string
- 8000320:	20000000 	.word	0x20000000
+ 8000340:	20000000 	.word	0x20000000
     LDR   R2, =string_buffer
- 8000324:	20000006 	.word	0x20000006
+ 8000344:	20000006 	.word	0x20000006
+	LDR R1, =hello_world_string
+ 8000348:	20000010 	.word	0x20000010
+	LDR R1, =palindrome_string
+ 800034c:	2000001c 	.word	0x2000001c
 	LDR R0, =cipher_key
- 8000328:	20000024 	.word	0x20000024
+ 8000350:	20000026 	.word	0x20000026
 	LDR R1, =cipher_string
- 800032c:	20000028 	.word	0x20000028
+ 8000354:	2000002a 	.word	0x2000002a
 	LDR R1, =cipher_string_1
- 8000330:	2000002c 	.word	0x2000002c
+ 8000358:	2000002e 	.word	0x2000002e
 	LDR R1, =cipher_string_2
- 8000334:	20000033 	.word	0x20000033
+ 800035c:	20000035 	.word	0x20000035
 	LDR R0, =cipher_key_1
- 8000338:	20000025 	.word	0x20000025
+ 8000360:	20000027 	.word	0x20000027
 	LDR R0, =cipher_key_2
- 800033c:	20000026 	.word	0x20000026
+ 8000364:	20000028 	.word	0x20000028
 	LDR R0, =cipher_key_3
- 8000340:	20000027 	.word	0x20000027
+ 8000368:	20000029 	.word	0x20000029
 
-08000344 <Reset_Handler>:
+0800036c <Reset_Handler>:
 
   .section .text.Reset_Handler
   .weak Reset_Handler
   .type Reset_Handler, %function
 Reset_Handler:
   ldr   r0, =_estack
- 8000344:	480d      	ldr	r0, [pc, #52]	@ (800037c <LoopForever+0x2>)
+ 800036c:	480d      	ldr	r0, [pc, #52]	@ (80003a4 <LoopForever+0x2>)
   mov   sp, r0          /* set stack pointer */
- 8000346:	4685      	mov	sp, r0
+ 800036e:	4685      	mov	sp, r0
 /* Call the clock system initialization function.*/
   bl  SystemInit
- 8000348:	f3af 8000 	nop.w
+ 8000370:	f3af 8000 	nop.w
 
 /* Copy the data segment initializers from flash to SRAM */
   ldr r0, =_sdata
- 800034c:	480c      	ldr	r0, [pc, #48]	@ (8000380 <LoopForever+0x6>)
+ 8000374:	480c      	ldr	r0, [pc, #48]	@ (80003a8 <LoopForever+0x6>)
   ldr r1, =_edata
- 800034e:	490d      	ldr	r1, [pc, #52]	@ (8000384 <LoopForever+0xa>)
+ 8000376:	490d      	ldr	r1, [pc, #52]	@ (80003ac <LoopForever+0xa>)
   ldr r2, =_sidata
- 8000350:	4a0d      	ldr	r2, [pc, #52]	@ (8000388 <LoopForever+0xe>)
+ 8000378:	4a0d      	ldr	r2, [pc, #52]	@ (80003b0 <LoopForever+0xe>)
   movs r3, #0
- 8000352:	2300      	movs	r3, #0
+ 800037a:	2300      	movs	r3, #0
   b LoopCopyDataInit
- 8000354:	e002      	b.n	800035c <LoopCopyDataInit>
+ 800037c:	e002      	b.n	8000384 <LoopCopyDataInit>
 
-08000356 <CopyDataInit>:
+0800037e <CopyDataInit>:
 
 CopyDataInit:
   ldr r4, [r2, r3]
- 8000356:	58d4      	ldr	r4, [r2, r3]
+ 800037e:	58d4      	ldr	r4, [r2, r3]
   str r4, [r0, r3]
- 8000358:	50c4      	str	r4, [r0, r3]
+ 8000380:	50c4      	str	r4, [r0, r3]
   adds r3, r3, #4
- 800035a:	3304      	adds	r3, #4
+ 8000382:	3304      	adds	r3, #4
 
-0800035c <LoopCopyDataInit>:
+08000384 <LoopCopyDataInit>:
 
 LoopCopyDataInit:
   adds r4, r0, r3
- 800035c:	18c4      	adds	r4, r0, r3
+ 8000384:	18c4      	adds	r4, r0, r3
   cmp r4, r1
- 800035e:	428c      	cmp	r4, r1
+ 8000386:	428c      	cmp	r4, r1
   bcc CopyDataInit
- 8000360:	d3f9      	bcc.n	8000356 <CopyDataInit>
+ 8000388:	d3f9      	bcc.n	800037e <CopyDataInit>
 
 /* Zero fill the bss segment. */
   ldr r2, =_sbss
- 8000362:	4a0a      	ldr	r2, [pc, #40]	@ (800038c <LoopForever+0x12>)
+ 800038a:	4a0a      	ldr	r2, [pc, #40]	@ (80003b4 <LoopForever+0x12>)
   ldr r4, =_ebss
- 8000364:	4c0a      	ldr	r4, [pc, #40]	@ (8000390 <LoopForever+0x16>)
+ 800038c:	4c0a      	ldr	r4, [pc, #40]	@ (80003b8 <LoopForever+0x16>)
   movs r3, #0
- 8000366:	2300      	movs	r3, #0
+ 800038e:	2300      	movs	r3, #0
   b LoopFillZerobss
- 8000368:	e001      	b.n	800036e <LoopFillZerobss>
+ 8000390:	e001      	b.n	8000396 <LoopFillZerobss>
 
-0800036a <FillZerobss>:
+08000392 <FillZerobss>:
 
 FillZerobss:
   str  r3, [r2]
- 800036a:	6013      	str	r3, [r2, #0]
+ 8000392:	6013      	str	r3, [r2, #0]
   adds r2, r2, #4
- 800036c:	3204      	adds	r2, #4
+ 8000394:	3204      	adds	r2, #4
 
-0800036e <LoopFillZerobss>:
+08000396 <LoopFillZerobss>:
 
 LoopFillZerobss:
   cmp r2, r4
- 800036e:	42a2      	cmp	r2, r4
+ 8000396:	42a2      	cmp	r2, r4
   bcc FillZerobss
- 8000370:	d3fb      	bcc.n	800036a <FillZerobss>
+ 8000398:	d3fb      	bcc.n	8000392 <FillZerobss>
 
 /* Call static constructors */
   bl __libc_init_array
- 8000372:	f000 f811 	bl	8000398 <__libc_init_array>
+ 800039a:	f000 f811 	bl	80003c0 <__libc_init_array>
 /* Call the application's entry point.*/
   bl main
- 8000376:	f7ff ff97 	bl	80002a8 <main>
+ 800039e:	f7ff ff8d 	bl	80002bc <main>
 
-0800037a <LoopForever>:
+080003a2 <LoopForever>:
 
 LoopForever:
   b LoopForever
- 800037a:	e7fe      	b.n	800037a <LoopForever>
+ 80003a2:	e7fe      	b.n	80003a2 <LoopForever>
   ldr   r0, =_estack
- 800037c:	2000a000 	.word	0x2000a000
+ 80003a4:	2000a000 	.word	0x2000a000
   ldr r0, =_sdata
- 8000380:	20000000 	.word	0x20000000
+ 80003a8:	20000000 	.word	0x20000000
   ldr r1, =_edata
- 8000384:	2000003c 	.word	0x2000003c
+ 80003ac:	2000003c 	.word	0x2000003c
   ldr r2, =_sidata
- 8000388:	08000400 	.word	0x08000400
+ 80003b0:	08000428 	.word	0x08000428
   ldr r2, =_sbss
- 800038c:	2000003c 	.word	0x2000003c
+ 80003b4:	2000003c 	.word	0x2000003c
   ldr r4, =_ebss
- 8000390:	20000058 	.word	0x20000058
+ 80003b8:	20000058 	.word	0x20000058
 
-08000394 <ADC1_2_IRQHandler>:
+080003bc <ADC1_2_IRQHandler>:
  * @retval : None
 */
   .section .text.Default_Handler,"ax",%progbits
 Default_Handler:
 Infinite_Loop:
   b Infinite_Loop
- 8000394:	e7fe      	b.n	8000394 <ADC1_2_IRQHandler>
+ 80003bc:	e7fe      	b.n	80003bc <ADC1_2_IRQHandler>
 	...
 
-08000398 <__libc_init_array>:
- 8000398:	b570      	push	{r4, r5, r6, lr}
- 800039a:	4d0d      	ldr	r5, [pc, #52]	@ (80003d0 <__libc_init_array+0x38>)
- 800039c:	4c0d      	ldr	r4, [pc, #52]	@ (80003d4 <__libc_init_array+0x3c>)
- 800039e:	1b64      	subs	r4, r4, r5
- 80003a0:	10a4      	asrs	r4, r4, #2
- 80003a2:	2600      	movs	r6, #0
- 80003a4:	42a6      	cmp	r6, r4
- 80003a6:	d109      	bne.n	80003bc <__libc_init_array+0x24>
- 80003a8:	4d0b      	ldr	r5, [pc, #44]	@ (80003d8 <__libc_init_array+0x40>)
- 80003aa:	4c0c      	ldr	r4, [pc, #48]	@ (80003dc <__libc_init_array+0x44>)
- 80003ac:	f000 f818 	bl	80003e0 <_init>
- 80003b0:	1b64      	subs	r4, r4, r5
- 80003b2:	10a4      	asrs	r4, r4, #2
- 80003b4:	2600      	movs	r6, #0
- 80003b6:	42a6      	cmp	r6, r4
- 80003b8:	d105      	bne.n	80003c6 <__libc_init_array+0x2e>
- 80003ba:	bd70      	pop	{r4, r5, r6, pc}
- 80003bc:	f855 3b04 	ldr.w	r3, [r5], #4
- 80003c0:	4798      	blx	r3
- 80003c2:	3601      	adds	r6, #1
- 80003c4:	e7ee      	b.n	80003a4 <__libc_init_array+0xc>
- 80003c6:	f855 3b04 	ldr.w	r3, [r5], #4
- 80003ca:	4798      	blx	r3
- 80003cc:	3601      	adds	r6, #1
- 80003ce:	e7f2      	b.n	80003b6 <__libc_init_array+0x1e>
- 80003d0:	080003f8 	.word	0x080003f8
- 80003d4:	080003f8 	.word	0x080003f8
- 80003d8:	080003f8 	.word	0x080003f8
- 80003dc:	080003fc 	.word	0x080003fc
+080003c0 <__libc_init_array>:
+ 80003c0:	b570      	push	{r4, r5, r6, lr}
+ 80003c2:	4d0d      	ldr	r5, [pc, #52]	@ (80003f8 <__libc_init_array+0x38>)
+ 80003c4:	4c0d      	ldr	r4, [pc, #52]	@ (80003fc <__libc_init_array+0x3c>)
+ 80003c6:	1b64      	subs	r4, r4, r5
+ 80003c8:	10a4      	asrs	r4, r4, #2
+ 80003ca:	2600      	movs	r6, #0
+ 80003cc:	42a6      	cmp	r6, r4
+ 80003ce:	d109      	bne.n	80003e4 <__libc_init_array+0x24>
+ 80003d0:	4d0b      	ldr	r5, [pc, #44]	@ (8000400 <__libc_init_array+0x40>)
+ 80003d2:	4c0c      	ldr	r4, [pc, #48]	@ (8000404 <__libc_init_array+0x44>)
+ 80003d4:	f000 f818 	bl	8000408 <_init>
+ 80003d8:	1b64      	subs	r4, r4, r5
+ 80003da:	10a4      	asrs	r4, r4, #2
+ 80003dc:	2600      	movs	r6, #0
+ 80003de:	42a6      	cmp	r6, r4
+ 80003e0:	d105      	bne.n	80003ee <__libc_init_array+0x2e>
+ 80003e2:	bd70      	pop	{r4, r5, r6, pc}
+ 80003e4:	f855 3b04 	ldr.w	r3, [r5], #4
+ 80003e8:	4798      	blx	r3
+ 80003ea:	3601      	adds	r6, #1
+ 80003ec:	e7ee      	b.n	80003cc <__libc_init_array+0xc>
+ 80003ee:	f855 3b04 	ldr.w	r3, [r5], #4
+ 80003f2:	4798      	blx	r3
+ 80003f4:	3601      	adds	r6, #1
+ 80003f6:	e7f2      	b.n	80003de <__libc_init_array+0x1e>
+ 80003f8:	08000420 	.word	0x08000420
+ 80003fc:	08000420 	.word	0x08000420
+ 8000400:	08000420 	.word	0x08000420
+ 8000404:	08000424 	.word	0x08000424
 
-080003e0 <_init>:
- 80003e0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
- 80003e2:	bf00      	nop
- 80003e4:	bcf8      	pop	{r3, r4, r5, r6, r7}
- 80003e6:	bc08      	pop	{r3}
- 80003e8:	469e      	mov	lr, r3
- 80003ea:	4770      	bx	lr
+08000408 <_init>:
+ 8000408:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 800040a:	bf00      	nop
+ 800040c:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 800040e:	bc08      	pop	{r3}
+ 8000410:	469e      	mov	lr, r3
+ 8000412:	4770      	bx	lr
 
-080003ec <_fini>:
- 80003ec:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
- 80003ee:	bf00      	nop
- 80003f0:	bcf8      	pop	{r3, r4, r5, r6, r7}
- 80003f2:	bc08      	pop	{r3}
- 80003f4:	469e      	mov	lr, r3
- 80003f6:	4770      	bx	lr
+08000414 <_fini>:
+ 8000414:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000416:	bf00      	nop
+ 8000418:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 800041a:	bc08      	pop	{r3}
+ 800041c:	469e      	mov	lr, r3
+ 800041e:	4770      	bx	lr

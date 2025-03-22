@@ -17,7 +17,7 @@
 .data
 
 hello_world_string: .asciz "Hello World"
-palindrome_string: .asciz "racecar"
+palindrome_string: .asciz ".raceCAR."
 
 // Tested with large positive and negative values
 cipher_key: .byte 3
@@ -37,11 +37,11 @@ main:
 	// B case_converter
 
 	// Test 1b
-	// LDR R1, =hello_world_string
-	// BL palindrome
+	LDR R1, =hello_world_string
+	BL palindrome
 
-	// LDR R1, =palindrome_string
-	// BL palindrome
+	LDR R1, =palindrome_string
+	BL palindrome
 
 	// Test 1c
 	// Basic test
