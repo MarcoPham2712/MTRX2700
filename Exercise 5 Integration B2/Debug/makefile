@@ -33,34 +33,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := exercise_2
+BUILD_ARTIFACT_NAME := Exercise 5 Integration B2
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-exercise_2.elf \
+Exercise\ 5\ Integration\ B2.elf \
 
 MAP_FILES += \
-exercise_2.map \
+Exercise\ 5\ Integration\ B2.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-exercise_2.list \
+Exercise\ 5\ Integration\ B2.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: exercise_2.elf secondary-outputs
+main-build: Exercise\ 5\ Integration\ B2.elf secondary-outputs
 
 # Tool invocations
-exercise_2.elf exercise_2.map: $(OBJS) $(USER_OBJS) /home/appl3s/Documents/mtrx/mtrx2700/MTRX2700/exercise_2/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "exercise_2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/appl3s/Documents/mtrx/mtrx2700/MTRX2700/exercise_2/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="exercise_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Exercise\ 5\ Integration\ B2.elf Exercise\ 5\ Integration\ B2.map: $(OBJS) $(USER_OBJS) /home/appl3s/Documents/mtrx/mtrx2700/MTRX2700/Exercise\ 5\ Integration\ B2/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Exercise 5 Integration B2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/appl3s/Documents/mtrx/mtrx2700/MTRX2700/Exercise 5 Integration B2/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Exercise 5 Integration B2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -69,14 +69,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-exercise_2.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "exercise_2.list"
+Exercise\ 5\ Integration\ B2.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Exercise 5 Integration B2.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) default.size.stdout exercise_2.elf exercise_2.list exercise_2.map
+	-$(RM) Exercise\ 5\ Integration\ B2.elf Exercise\ 5\ Integration\ B2.list Exercise\ 5\ Integration\ B2.map Exercise\\ 5\\ Integration\\ B2.elf default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

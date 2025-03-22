@@ -5,30 +5,27 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 S_SRCS += \
+../Src/cipher_1c.s \
 ../Src/definitions.s \
 ../Src/initialise.s \
-../Src/light_down_leds_2c.s \
-../Src/light_up_leds_2b.s \
 ../Src/main.s \
-../Src/set_led_state_2a.s \
+../Src/palindrome_1b.s \
 ../Src/vowels_2d.s 
 
 OBJS += \
+./Src/cipher_1c.o \
 ./Src/definitions.o \
 ./Src/initialise.o \
-./Src/light_down_leds_2c.o \
-./Src/light_up_leds_2b.o \
 ./Src/main.o \
-./Src/set_led_state_2a.o \
+./Src/palindrome_1b.o \
 ./Src/vowels_2d.o 
 
 S_DEPS += \
+./Src/cipher_1c.d \
 ./Src/definitions.d \
 ./Src/initialise.d \
-./Src/light_down_leds_2c.d \
-./Src/light_up_leds_2b.d \
 ./Src/main.d \
-./Src/set_led_state_2a.d \
+./Src/palindrome_1b.d \
 ./Src/vowels_2d.d 
 
 
@@ -39,7 +36,7 @@ Src/%.o: ../Src/%.s Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/definitions.d ./Src/definitions.o ./Src/initialise.d ./Src/initialise.o ./Src/light_down_leds_2c.d ./Src/light_down_leds_2c.o ./Src/light_up_leds_2b.d ./Src/light_up_leds_2b.o ./Src/main.d ./Src/main.o ./Src/set_led_state_2a.d ./Src/set_led_state_2a.o ./Src/vowels_2d.d ./Src/vowels_2d.o
+	-$(RM) ./Src/cipher_1c.d ./Src/cipher_1c.o ./Src/definitions.d ./Src/definitions.o ./Src/initialise.d ./Src/initialise.o ./Src/main.d ./Src/main.o ./Src/palindrome_1b.d ./Src/palindrome_1b.o ./Src/vowels_2d.d ./Src/vowels_2d.o
 
 .PHONY: clean-Src
 
