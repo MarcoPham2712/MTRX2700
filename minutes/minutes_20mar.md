@@ -8,19 +8,8 @@
     Upcoming weekly plan.
 
 __Summary__
-
-
-
-
-
-
-IGNORE THIS
-We first shared the code we used in the Early Feedback Task for our own personal review.
-Shirui has completed Ex4. The only remaining tasks are Ex2 part d (vowel counter
-and display) and Ex3 (UART).
-Ben will complete Ex2 part d while Johnathan, Marco and Shirui will complete the UART
-task.
-
-Ben has completed Ex2 part d. Marco will complete the UART task and Johnathan will prepare
-the github repository for the integration stage next week along with writing the
-exercise summaries.
+Ben and Johnathan have created a framework for the integration code and are
+waiting on UART to be completed. We have organised a meeting at Saturday noon
+where we will work on the rest of the assignment in the PNR. This ensures we
+have enough time to hold another meeting if we do not complete the task on
+Saturday.
