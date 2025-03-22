@@ -2,5 +2,4 @@
 "./Src/cipher_1c.o"
 "./Src/main.o"
 "./Src/palindrome_1b.o"
-"./Src/palindrome_1b_extra_cases.o"
 "./Startup/startup_stm32f303vctx.o"

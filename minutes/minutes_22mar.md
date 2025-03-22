@@ -11,4 +11,7 @@
 __Summary__
 Shirui has completed some of the UART code and we are waiting for him to upload
 it to Github. Johnathan has fixed the Caesar Cipher code and Ben has modified
-the palindrome code to be case-insensitive.
+the palindrome code to be case-insensitive. Marco has been working with the UART
+while Shirui is away.
+
+We have organised another meeting during the lecture on Monday.

@@ -5,32 +5,23 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 S_SRCS += \
-../Src/case_converter_1a.s \
-../Src/cipher_1c.s \
-../Src/main.s \
-../Src/palindrome_1b.s 
+../Startup/startup_stm32f303vctx.s 
 
 OBJS += \
-./Src/case_converter_1a.o \
-./Src/cipher_1c.o \
-./Src/main.o \
-./Src/palindrome_1b.o 
+./Startup/startup_stm32f303vctx.o 
 
 S_DEPS += \
-./Src/case_converter_1a.d \
-./Src/cipher_1c.d \
-./Src/main.d \
-./Src/palindrome_1b.d 
+./Startup/startup_stm32f303vctx.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Src/%.o: ../Src/%.s Src/subdir.mk
+Startup/%.o: ../Startup/%.s Startup/subdir.mk
 	arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -DDEBUG -c -x assembler-with-cpp -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@" "$<"
 
-clean: clean-Src
+clean: clean-Startup
 
-clean-Src:
-	-$(RM) ./Src/case_converter_1a.d ./Src/case_converter_1a.o ./Src/cipher_1c.d ./Src/cipher_1c.o ./Src/main.d ./Src/main.o ./Src/palindrome_1b.d ./Src/palindrome_1b.o
+clean-Startup:
+	-$(RM) ./Startup/startup_stm32f303vctx.d ./Startup/startup_stm32f303vctx.o
 
-.PHONY: clean-Src
+.PHONY: clean-Startup
 

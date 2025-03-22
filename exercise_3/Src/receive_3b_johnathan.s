@@ -1,11 +1,15 @@
 .syntax unified
 .thumb
-#include "initialise.s"
+
+#include "definitions.s"
+
 .data
 .align
 
 incoming_buffer: .space 256
 incoming_counter: .byte 255
+
+success_msg: .asciz "Success\r\n"
 
 terminator: .byte '*'
 
@@ -23,12 +27,14 @@ receive_main:
 	LDR R2, =terminator
 	LDRB R2, [R2]
 	PUSH {R0, R1, R2}
-	B receive_string
+	BL receive_string
 
 	// Append a NULL terminator to the end of the used buffer space
 	LDR R3, =incoming_buffer
 	MOV R4, #0
 	STRB R4, [R3, R0]
+
+	B tx_loop
 
 // Takes in 3 arguments from the stack:
 //   Buffer pointer
@@ -40,7 +46,10 @@ receive_main:
 // the received bytes.
 // Returns the index after the final character read into the buffer
 receive_string:
-	POP {R6, R7, R4}
+	POP {R6}
+	POP {R7}
+	POP {R4}
+	// POP {R6, R7, R4}
 	MOV R5, #0
 
 	receive_until_terminator:
@@ -88,3 +97,50 @@ receive_string:
     	ORR R1, 1 << UART_ORECF | 1 << UART_FECF
     	STR R1, [R0, USART_ICR]
     	B receive_until_terminator
+
+
+@ The transfer function is used to transfer previously saved data
+tx_loop:
+    LDR R0,=UART
+    LDR R3,=incoming_buffer
+    MOV R4,R9
+
+tx_uart:
+    LDR R1,[R0, USART_ISR]
+    TST R1,1 << UART_TXE
+    BEQ tx_uart
+
+    LDRB R5,[R3], #1
+    STRB R5,[R0, USART_TDR]
+    SUBS R4,#1
+    BGT tx_uart
+    LDR R3,=success_msg
+
+@ Transfer message Success
+tx_success_loop:
+    LDRB R5,[R3],#1
+    CMP R5,#0
+    BEQ restart_loop
+
+tx_uart_success:
+    LDR R1,[R0, USART_ISR]
+    TST R1,1 << UART_TXE
+    BEQ tx_uart_success
+
+    STRB R5,[R0, USART_TDR]
+    B tx_success_loop
+
+@Empty the counter and wait to return to the next accept and transfer
+restart_loop:
+    MOV R8, #0
+    B receive_main
+
+delay_loop:
+    LDR R9, =0xfffff
+delay_inner:
+    SUBS R9, #1
+    BGT delay_inner
+    BX LR
+
+
+

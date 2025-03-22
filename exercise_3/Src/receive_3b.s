@@ -12,7 +12,7 @@ terminator: .asciz "*"
 success_msg: .asciz "successful\n"
 
 .text
-main:
+receive_main:
 	BL initialise_power				@ Power on the STM32 board
 	BL enable_peripheral_clocks		@ Initializes and peripheral clocks
 	BL initialise_discovery_board	@ Initialize the board
