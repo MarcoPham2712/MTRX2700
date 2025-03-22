@@ -6,6 +6,7 @@
 #include "initialise.s"
 #include "cipher_1c.s"
 #include "palindrome_1b.s"
+#include "receive_3b_johnathan.s"
 #include "vowels_2d.s"
 
 .data
@@ -14,6 +15,10 @@ decipher_key: .word -3
 test_string: .asciz "abcde.fghi44jkl,mnopq1"
 test_palindrome: .asciz "efffe"
 decipher_buffer: .space 32
+
+serial_buffer: .space 300
+serial_buffer_size: .word 300
+terminator: .byte '*'
 
 .text
 set_led_state:
@@ -29,13 +34,26 @@ main:
 	BL Set_LED_to_output        // Once the clocks are started, need to initialise the discovery board I/O
 	B program_loop
 
+	// TODO add support for serial
+
 program_loop:
 	// Poll until a message is received
-	// TODO
+	// Setup and call the receive string function
+	LDR R0, =serial_buffer
+	LDR R1, =serial_buffer_size
+	LDRB R1, [R1]
+	LDR R2, =terminator
+	LDRB R2, [R2]
+	PUSH {R0, R1, R2}
+	BL receive_string
+
+	// Append a NULL terminator to the end of the used buffer space
+	LDR R1, =incoming_buffer
+	MOV R2, #0
+	STRB R2, [R1, R0]
 
 	// Load message into R1
-	// TODO
-	LDR R1, =test_palindrome
+	LDR R1, =serial_buffer
 
 	// Check if message is a palindrome
 	check_palindrome:
@@ -51,7 +69,7 @@ decipher:
 	// Setup and run cipher
 	LDR R0, =decipher_key
 	LDR R0, [R0]
-	LDR R1, =test_palindrome
+	LDR R1, =serial_buffer
 	PUSH {R0, R1}
 	BL caesar_cipher
 	B display_message_info
