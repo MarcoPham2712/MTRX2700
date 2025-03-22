@@ -10,7 +10,7 @@
 
 .data
 // Cipher is 3
-decipher_key: .word 3
+decipher_key: .word -3
 test_string: .asciz "abcde.fghi44jkl,mnopq1"
 test_palindrome: .asciz "efffe"
 decipher_buffer: .space 32
@@ -49,10 +49,10 @@ program_loop:
 
 decipher:
 	// Setup and run cipher
-	LDR R0, =decipher_keyMOV
+	LDR R0, =decipher_key
 	LDR R0, [R0]
-	LDR R2, =decipher_buffer
-	LDR R3, =0x00
+	LDR R1, =test_palindrome
+	PUSH {R0, R1}
 	BL caesar_cipher
 	B display_message_info
 

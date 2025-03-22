@@ -1,9 +1,8 @@
+// ACKNOWLEDGEMENT OF USE OF AI
+// The modulus operations used in this file were written with the assistance of AI
+
 .syntax unified
 .thumb
-
-.data
-asciii_string: .asciz "ABcd\0"
-string_bufferr: .space 10          @ Destination buffer (10 bytes)
 
 .text
 
@@ -15,9 +14,20 @@ string_bufferr: .space 10          @ Destination buffer (10 bytes)
 // R2: Character being ciphered
 // R3: 'A' or 'a' to indicate if cipher is upper/lower
 // R4: Result of division required for modulo operator
+// R5: Modulo divisor
 caesar_cipher:
+	// Register setup
 	POP {R0, R1} // Pop the cipher key and string from the stack
 	SUB R1, #1   // Start before the string (because pre-increment loop)
+	MOV R5, #26
+
+	// Convert cipher key to positive value in range [0, 25]
+	SDIV R4, R0, R5
+	MUL R4, R5
+	SUB R0, R4
+	CMP R0, #0 // Add 26 to negative values
+	BGE cipher_next
+	ADD R0, R5
 
 	cipher_next:
 		// Iterate string until terminating NULLL
@@ -41,18 +51,18 @@ caesar_cipher:
 		BGE perform_cipher
 
 	perform_cipher:
-		// Convert letter to a number [0, 26] and perform cipher
+		// Convert letter to a number [0, 25] and perform cipher
 		SUB R2, R3
 		ADD R2, R0
 
 		// Modulo operation (subtract highest multiple of 26)
-		UDIV R4, R2, #26
-		MUL R4, #26
+		UDIV R4, R2, R5
+		MUL R4, R5
 		SUB R2, R4
 
 		// Convert number back to letter of given case, store in R1
 		ADD R2, R3
-		STRB R1, R2
+		STRB R2, [R1]
 		B cipher_next
 
 	cipher_finish:
