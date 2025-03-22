@@ -14,8 +14,8 @@ Function comments are presented to show inputs and outputs based on the register
 ### Exercise 1 Memory and Pointers
 ```
 Part A: Shirui
-Part B: Johnathan
-Part C: Shirui
+Part B: Johnathan, Ben
+Part C: Shirui, Johnathan
 ```
 In this project we define string functions to convert to lower/upper case, check if a string is a palindrome and perform Caesar ciphers on strings.
 
@@ -44,6 +44,6 @@ Part C: Shirui
 ```
 ### Exercise 5 Integration
 **Workspace Preparation:** Johnathan
-*(copy files into 1 project, delete all main functions):* Johnathan
+*(copy files into 1 project, delete all main functions)*
 
-**Integration Programmers:**
+**Integration Programmers:** Johnathan, Ben
