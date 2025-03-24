@@ -30,7 +30,7 @@ caesar_cipher:
 		// Iterate string until terminating NULLL
 		LDRB R2, [R1, #1]!
 		CMP R2, #0
-		BEQ cipher_finish
+		BEQ add_asterisk
 
 		// Ignore values before and after the alphabet
 		CMP R2, #'A'
@@ -62,6 +62,14 @@ caesar_cipher:
 		STRB R2, [R1]
 		B cipher_next
 
+	add_asterisk:
+        MOV R2, #'*'          
+        STRB R2, [R1], #1     //Store '*' and increment R1
+        MOV R2, #0            
+        STRB R2, [R1]         //Store null character again
+        B cipher_finish
+
 	cipher_finish:
+		PUSH {R1}
 		BX LR
 

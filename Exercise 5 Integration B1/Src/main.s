@@ -51,15 +51,19 @@ loop_forever:
     TST R1,1 << UART_RXNE
     BEQ loop_forever
 
-    LDRB R3,[R0,USART_RDR]      	@ load the lowest byte (RDR bits [0:7] for an 8 bit read)
+    LDRB R3,[R0,USART_RDR]
+    LDR R4,=terminator
+	LDRB R5,[R4]
+	CMP R3,R5              			@ Check whether it is the terminator
+    BEQ found_terminator     	@ load the lowest byte (RDR bits [0:7] for an 8 bit read)
     STRB R3,[R6,R8]             	@ Store in the buffer
     ADD R8,#1
-
+/*
 	LDR R4,=terminator
 	LDRB R5,[R4]
 	CMP R3,R5              			@ Check whether it is the terminator
     BEQ found_terminator
-
+*/
     CMP R7,R8                    	@ Check whether the buffer is exceeded
     BGT no_reset
     MOV R8,#0
@@ -182,9 +186,25 @@ palindrome:
 	// Set R0 to 1 if string is a palindrome, else 0
 	palindrome_pass:
 		BL caesar_cipher
+		POP {R1}
+
 
 	palindrome_fail:
-		LDR R0, =#0x0
+		MOV R2, R1
+		palindrome_fail_loop:
+			LDRB R3, [R2], #1
+			CMP R3, 0x00
+			BEQ asterisk
+			B palindrome_fail_loop
+
+		asterisk:
+			SUB R2, #1
+        	MOV R0, #'*'
+        	STRB R0, [R2], #1     //Store '*' and increment R1
+        	MOV R0, #0
+        	STRB R0, [R2]         //Store null character again
+        	PUSH {R2}
+
 		BX LR
 
 
