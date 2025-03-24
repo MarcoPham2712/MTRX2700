@@ -21,67 +21,66 @@ serial_buffer_size: .word 300
 terminator: .byte '*'
 
 .text
+// Utility function
 set_led_state:
 	// Replace GPIOE ODR with R3 bitmask
 	LDR R1, =GPIOE
 	STRB R3, [R1, #ODR + 1]
-
 	BX LR
 
 main:
     // Initialise GPIO registers
 	BL enable_peripheral_clocks // Branch with link to set the clocks for the I/O and UART
 	BL Set_LED_to_output        // Once the clocks are started, need to initialise the discovery board I/O
-	B program_loop
+	// TODO add support for serial via pins
+	// TODO add timer initialisation
 
-	// TODO add support for serial
-
+// It's called a program loop but we never added functionality to reset
+// back to here, so in reality its only called once
 program_loop:
 	// Poll until a message is received
-	// Setup and call the receive string function
-	LDR R0, =serial_buffer
-	LDR R1, =serial_buffer_size
-	LDRB R1, [R1]
-	LDR R2, =terminator
-	LDRB R2, [R2]
-	PUSH {R0, R1, R2}
-	BL receive_string
+	// Setup and call the receive_string function
+	grab_string:
+		LDR  R0, =serial_buffer
+		LDR  R1, =serial_buffer_size
+		LDRB R1, [R1]
+		LDR  R2, =terminator
+		LDRB R2, [R2]
+		PUSH {R0, R1, R2}
+		BL receive_string
 
 	// Append a NULL terminator to the end of the used buffer space
-	LDR R1, =incoming_buffer
-	MOV R2, #0
-	STRB R2, [R1, R0]
-
-	// Load message into R1
-	LDR R1, =serial_buffer
+	append_null_to_string:
+		LDR  R1, =incoming_buffer
+		MOV  R2, #0
+		STRB R2, [R1, R0]
 
 	// Check if message is a palindrome
 	check_palindrome:
+		LDR R1, =serial_buffer
 		BL palindrome
 
 		// Decipher palindrome messages (R0 is 1 if palindrome, otherwise 0)
-		CMP R0, #0x1
+		CMP R0, #1
 		BEQ decipher
+		B display_message_info // Go straight to display if not a palindrome
 
-	B display_message_info
+	decipher:
+		// Setup and run cipher
+		LDR R0, =decipher_key
+		LDR R0, [R0]
+		LDR R1, =serial_buffer
+		PUSH {R0, R1}
+		BL caesar_cipher
 
-decipher:
-	// Setup and run cipher
-	LDR R0, =decipher_key
-	LDR R0, [R0]
-	LDR R1, =serial_buffer
-	PUSH {R0, R1}
-	BL caesar_cipher
-	B display_message_info
+	display_message_info:
+		// String input for vowels function is R0
+		MOV R0, R1
 
-display_message_info:
-	// String input for vowels function is R0
-	MOV R0, R1
-
-	// Count vowels and consonants in R6 and R7 respectively (from R3, R1 respectively)
-	BL Vowels
-	MOV R6, R3
-	MOV R7, R1
+		// Count vowels and consonants in R6 and R7 respectively (from R3, R1 respectively)
+		BL Vowels
+		MOV R6, R3
+		MOV R7, R1
 
 	display_loop:
 		// Show vowels count
