@@ -17,3 +17,5 @@ working on the UART while Shirui is away.
 We have organised another meeting during the lecture on Monday and hope for
 another to discuss the individually written parts of the code so that everybody
 is confident enough to explain everything.
+
+Marco has taken home Johnathan's STM32 board.
