@@ -31,17 +31,21 @@ We begin by providing a function that can set the LEDs on the STM32F3 Discovery 
 ### Exercise 3 Serial Communication
 ```
 Part A: Marco
-Part B: Marco
+Part B: Marco, Shirui, Johnathan
 Part C: Shirui (?)
-Part D: Marco
+Part D: Marco, Shirui
 Part E: Marco
 ```
+We create functions to perform serial communication via UART. These include transmit, receive and echo functions which we use to create a communication interface between two boards.
+
 ### Exercise 4 Hardware Timers
 ```
 Part A: Shirui
 Part B: Shirui
 Part C: Shirui
 ```
+
+
 ### Exercise 5 Integration
 **Workspace Preparation:** Johnathan
 *(copy files into 1 project, delete all main functions)*
