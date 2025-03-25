@@ -1,0 +1,697 @@
+
+Serialpart5.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000194  08000000  08000000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         000002ac  08000194  08000194  00001194  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000000  08000440  08000440  00002054  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .ARM.extab    00000000  08000440  08000440  00002054  2**0
+                  CONTENTS, READONLY
+  4 .ARM          00000000  08000440  08000440  00002054  2**0
+                  CONTENTS, READONLY
+  5 .preinit_array 00000000  08000440  08000440  00002054  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  08000440  08000440  00001440  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .fini_array   00000004  08000444  08000444  00001444  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  8 .data         00000054  20000000  08000448  00002000  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .ccmram       00000000  10000000  10000000  00002054  2**0
+                  CONTENTS
+ 10 .bss          0000001c  20000054  20000054  00002054  2**2
+                  ALLOC
+ 11 ._user_heap_stack 00000600  20000070  20000070  00002054  2**0
+                  ALLOC
+ 12 .ARM.attributes 00000030  00000000  00000000  00002054  2**0
+                  CONTENTS, READONLY
+ 13 .debug_line   00000181  00000000  00000000  00002084  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_line_str 00000081  00000000  00000000  00002205  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_info   00000055  00000000  00000000  00002286  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_abbrev 00000038  00000000  00000000  000022db  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_aranges 00000048  00000000  00000000  00002318  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_str    00000092  00000000  00000000  00002360  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .debug_rnglists 00000019  00000000  00000000  000023f2  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 20 .debug_frame  0000002c  00000000  00000000  0000240c  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+08000194 <__do_global_dtors_aux>:
+ 8000194:	b510      	push	{r4, lr}
+ 8000196:	4c05      	ldr	r4, [pc, #20]	@ (80001ac <__do_global_dtors_aux+0x18>)
+ 8000198:	7823      	ldrb	r3, [r4, #0]
+ 800019a:	b933      	cbnz	r3, 80001aa <__do_global_dtors_aux+0x16>
+ 800019c:	4b04      	ldr	r3, [pc, #16]	@ (80001b0 <__do_global_dtors_aux+0x1c>)
+ 800019e:	b113      	cbz	r3, 80001a6 <__do_global_dtors_aux+0x12>
+ 80001a0:	4804      	ldr	r0, [pc, #16]	@ (80001b4 <__do_global_dtors_aux+0x20>)
+ 80001a2:	f3af 8000 	nop.w
+ 80001a6:	2301      	movs	r3, #1
+ 80001a8:	7023      	strb	r3, [r4, #0]
+ 80001aa:	bd10      	pop	{r4, pc}
+ 80001ac:	20000054 	.word	0x20000054
+ 80001b0:	00000000 	.word	0x00000000
+ 80001b4:	08000428 	.word	0x08000428
+
+080001b8 <frame_dummy>:
+ 80001b8:	b508      	push	{r3, lr}
+ 80001ba:	4b03      	ldr	r3, [pc, #12]	@ (80001c8 <frame_dummy+0x10>)
+ 80001bc:	b11b      	cbz	r3, 80001c6 <frame_dummy+0xe>
+ 80001be:	4903      	ldr	r1, [pc, #12]	@ (80001cc <frame_dummy+0x14>)
+ 80001c0:	4803      	ldr	r0, [pc, #12]	@ (80001d0 <frame_dummy+0x18>)
+ 80001c2:	f3af 8000 	nop.w
+ 80001c6:	bd08      	pop	{r3, pc}
+ 80001c8:	00000000 	.word	0x00000000
+ 80001cc:	20000058 	.word	0x20000058
+ 80001d0:	08000428 	.word	0x08000428
+
+080001d4 <enable_peripheral_clocks>:
+#include "definitions.s"
+
+@ function to enable the clocks for the peripherals we could be using (A, B, C, D and E)
+enable_peripheral_clocks:
+	@ load the address of the RCC address boundary (for enabling the IO clock)
+	LDR R0, =RCC
+ 80001d4:	4863      	ldr	r0, [pc, #396]	@ (8000364 <delay_inner+0x8>)
+	@ enable all of the GPIO peripherals in AHBENR
+	LDR R1, [R0, #AHBENR]
+ 80001d6:	6941      	ldr	r1, [r0, #20]
+	ORR R1, 1 << GPIOE_ENABLE | 1 << GPIOD_ENABLE | 1 << GPIOC_ENABLE | 1 << GPIOB_ENABLE | 1 << GPIOA_ENABLE  @ enable GPIO
+ 80001d8:	f441 1178 	orr.w	r1, r1, #4063232	@ 0x3e0000
+	STR R1, [R0, #AHBENR]
+ 80001dc:	6141      	str	r1, [r0, #20]
+	BX LR @ return
+ 80001de:	4770      	bx	lr
+
+080001e0 <initialise_discovery_board>:
+
+@ initialise the discovery board I/O (just outputs: inputs are selected by default)
+initialise_discovery_board:
+	LDR R0, =GPIOE 	@ load the address of the GPIOE register into R0
+ 80001e0:	4861      	ldr	r0, [pc, #388]	@ (8000368 <delay_inner+0xc>)
+	LDR R1, =0x5555  @ load the binary value of 01 (OUTPUT) for each port in the upper two bytes
+ 80001e2:	f245 5155 	movw	r1, #21845	@ 0x5555
+					 @ as 0x5555 = 01010101 01010101
+	STRH R1, [R0, #GPIO_MODER + 2]   @ store the new register values in the top half word representing
+ 80001e6:	8041      	strh	r1, [r0, #2]
+								@ the MODER settings for pe8-15
+	BX LR @ return from function call
+ 80001e8:	4770      	bx	lr
+
+080001ea <enable_usart1>:
+@ Setting the alternate pin functions for the UART (select the pins you want to use)
+@ BAUD rate needs to change depending on whether it is 8MHz (external clock) or 24MHz (our PLL setting)
+enable_usart1:
+	@make a note about the different ways that we set specific bits in this configuration section
+	@ select which UART you want to enable
+	LDR R0, =GPIOC
+ 80001ea:	4860      	ldr	r0, [pc, #384]	@ (800036c <delay_inner+0x10>)
+	@ set the alternate function for the UART pins (what ever you have selected)
+	LDR R1, =0x77
+ 80001ec:	f04f 0177 	mov.w	r1, #119	@ 0x77
+	STRB R1, [R0, AFRL + 2]
+ 80001f0:	f880 1022 	strb.w	r1, [r0, #34]	@ 0x22
+	@ modify the mode of the GPIO pins you want to use to enable 'alternate function mode'
+	LDR R1, [R0, GPIO_MODER]
+ 80001f4:	6801      	ldr	r1, [r0, #0]
+	ORR R1, 0xA00 @ Mask for pins to change to 'alternate function mode'
+ 80001f6:	f441 6120 	orr.w	r1, r1, #2560	@ 0xa00
+	STR R1, [R0, GPIO_MODER]
+ 80001fa:	6001      	str	r1, [r0, #0]
+	@ modify the speed of the GPIO pins you want to use to enable 'high speed'
+	LDR R1, [R0, GPIO_OSPEEDR]
+ 80001fc:	6881      	ldr	r1, [r0, #8]
+	ORR R1, 0xF00 @ Mask for pins to be set as high speed
+ 80001fe:	f441 6170 	orr.w	r1, r1, #3840	@ 0xf00
+	STR R1, [R0, GPIO_OSPEEDR]
+ 8000202:	6081      	str	r1, [r0, #8]
+	@ Set the enable bit for the specific UART you want to use
+	@ Note: this might be in APB1ENR or APB2ENR
+	@ you can find this out by looking in the datasheet
+	LDR R0, =RCC @ the base address for the register to turn clocks on/off
+ 8000204:	4857      	ldr	r0, [pc, #348]	@ (8000364 <delay_inner+0x8>)
+	LDR R1, [R0, #APB2ENR] @ load the original value from the enable register
+ 8000206:	6981      	ldr	r1, [r0, #24]
+	ORR R1, 1 << USART1_EN  @ apply the bit mask to the previous values of the enable the UART
+ 8000208:	f441 4180 	orr.w	r1, r1, #16384	@ 0x4000
+	STR R1, [R0, #APB2ENR] @ store the modified enable register values back to RCC
+ 800020c:	6181      	str	r1, [r0, #24]
+	@ this is the baud rate
+	MOV R1, #0x46 @ from our earlier calculations (for 8MHz), store this in register R1
+ 800020e:	f04f 0146 	mov.w	r1, #70	@ 0x46
+	LDR R0, =USART1 @ the base address for the register to turn clocks on/off
+ 8000212:	4857      	ldr	r0, [pc, #348]	@ (8000370 <delay_inner+0x14>)
+	STRH R1, [R0, #USART_BRR] @ store this value directly in the first half word (16 bits) of
+ 8000214:	8181      	strh	r1, [r0, #12]
+							  	 @ the baud rate register
+	@ we want to set a few things here, lets define their bit positions to make it more readable
+	LDR R0, =USART1 @ the base address for the register to set up the specified UART
+ 8000216:	4856      	ldr	r0, [pc, #344]	@ (8000370 <delay_inner+0x14>)
+	LDR R1, [R0, #USART_CR1] @ load the original value from the enable register
+ 8000218:	6801      	ldr	r1, [r0, #0]
+	ORR R1, 1 << UART_TE | 1 << UART_RE | 1 << UART_UE @ make a bit mask with a '1' for the bits to enable,
+ 800021a:	f041 010d 	orr.w	r1, r1, #13
+ @ apply the bit mask to the previous values of the enable register
+	STR R1, [R0, #USART_CR1] @ store the modified enable register values back to RCC
+ 800021e:	6001      	str	r1, [r0, #0]
+	BX LR @ return
+ 8000220:	4770      	bx	lr
+
+08000222 <enable_uart4>:
+
+
+enable_uart4:
+	@make a note about the different ways that we set specific bits in this configuration section
+	@ select which UART you want to enable
+	LDR R0, =GPIOC
+ 8000222:	4852      	ldr	r0, [pc, #328]	@ (800036c <delay_inner+0x10>)
+	@ set the alternate function for the UART pins (what ever you have selected)
+	LDR R1, =0x55
+ 8000224:	f04f 0155 	mov.w	r1, #85	@ 0x55
+	STRB R1, [R0, AFRH + 1]
+ 8000228:	f880 1025 	strb.w	r1, [r0, #37]	@ 0x25
+	@ modify the mode of the GPIO pins you want to use to enable 'alternate function mode'
+	LDR R1, [R0, GPIO_MODER]
+ 800022c:	6801      	ldr	r1, [r0, #0]
+	ORR R1, 0xA00 @ Mask for pins to change to 'alternate function mode'
+ 800022e:	f441 6120 	orr.w	r1, r1, #2560	@ 0xa00
+	STR R1, [R0, GPIO_MODER]
+ 8000232:	6001      	str	r1, [r0, #0]
+	@ modify the speed of the GPIO pins you want to use to enable 'high speed'
+	LDR R1, [R0, GPIO_OSPEEDR]
+ 8000234:	6881      	ldr	r1, [r0, #8]
+	ORR R1, 0xF00 @ Mask for pins to be set as high speed
+ 8000236:	f441 6170 	orr.w	r1, r1, #3840	@ 0xf00
+	STR R1, [R0, GPIO_OSPEEDR]
+ 800023a:	6081      	str	r1, [r0, #8]
+	@ Set the enable bit for the specific UART you want to use
+	@ Note: this might be in APB1ENR or APB2ENR
+	@ you can find this out by looking in the datasheet
+	LDR R0, =RCC @ the base address for the register to turn clocks on/off
+ 800023c:	4849      	ldr	r0, [pc, #292]	@ (8000364 <delay_inner+0x8>)
+	LDR R1, [R0, #APB1ENR] @ load the original value from the enable register
+ 800023e:	69c1      	ldr	r1, [r0, #28]
+	ORR R1, 1 << UART4_EN  @ apply the bit mask to the previous values of the enable the UART
+ 8000240:	f441 2100 	orr.w	r1, r1, #524288	@ 0x80000
+	STR R1, [R0, #APB1ENR] @ store the modified enable register values back to RCC
+ 8000244:	61c1      	str	r1, [r0, #28]
+	@ this is the baud rate
+	MOV R1, #0x46 @ from our earlier calculations (for 8MHz), store this in register R1
+ 8000246:	f04f 0146 	mov.w	r1, #70	@ 0x46
+	LDR R0, =UART4 @ the base address for the register to turn clocks on/off
+ 800024a:	484a      	ldr	r0, [pc, #296]	@ (8000374 <delay_inner+0x18>)
+	STRH R1, [R0, #USART_BRR] @ store this value directly in the first half word (16 bits) of
+ 800024c:	8181      	strh	r1, [r0, #12]
+							  	 @ the baud rate register
+	@ we want to set a few things here, lets define their bit positions to make it more readable
+	LDR R0, =UART4 @ the base address for the register to set up the specified UART
+ 800024e:	4849      	ldr	r0, [pc, #292]	@ (8000374 <delay_inner+0x18>)
+	LDR R1, [R0, #USART_CR1] @ load the original value from the enable register
+ 8000250:	6801      	ldr	r1, [r0, #0]
+	ORR R1, 1 << UART_TE | 1 << UART_RE | 1 << UART_UE @ make a bit mask with a '1' for the bits to enable,
+ 8000252:	f041 010d 	orr.w	r1, r1, #13
+ @ apply the bit mask to the previous values of the enable register
+	STR R1, [R0, #USART_CR1] @ store the modified enable register values back to RCC
+ 8000256:	6001      	str	r1, [r0, #0]
+	BX LR @ return
+ 8000258:	4770      	bx	lr
+
+0800025a <change_clock_speed>:
+
+@ set the PLL (clocks are described in page 125 of the large manual)
+change_clock_speed:
+@ step 1, set clock to HSE (the external clock)
+	@ enable HSE (and wait for complete)
+	LDR R0, =RCC @ the base address for the register to turn clocks on/off
+ 800025a:	4842      	ldr	r0, [pc, #264]	@ (8000364 <delay_inner+0x8>)
+	LDR R1, [R0, #RCC_CR] @ load the original value from the enable register
+ 800025c:	6801      	ldr	r1, [r0, #0]
+	LDR R2, =1 << HSEBYP | 1 << HSEON @ make a bit mask with a '1' in the 0th bit position
+ 800025e:	f44f 22a0 	mov.w	r2, #327680	@ 0x50000
+	ORR R1, R2 @ apply the bit mask to the previous values of the enable register
+ 8000262:	ea41 0102 	orr.w	r1, r1, r2
+	STR R1, [R0, #RCC_CR] @ store the modified enable register values back to RCC
+ 8000266:	6001      	str	r1, [r0, #0]
+
+08000268 <wait_for_HSERDY>:
+	@ wait for the changes to be completed
+wait_for_HSERDY:
+	LDR R1, [R0, #RCC_CR] @ load the original value from the enable register
+ 8000268:	6801      	ldr	r1, [r0, #0]
+	TST R1, 1 << HSERDY @ Test the HSERDY bit (check if it is 1)
+ 800026a:	f411 3f00 	tst.w	r1, #131072	@ 0x20000
+	BEQ wait_for_HSERDY
+ 800026e:	d0fb      	beq.n	8000268 <wait_for_HSERDY>
+@ step 2, now the clock is HSE, we are allowed to switch to PLL
+	@ clock is set to External clock (external crystal) - 8MHz, can enable the PLL now
+	LDR R1, [R0, #RCC_CFGR] @ load the original value from the enable register
+ 8000270:	6841      	ldr	r1, [r0, #4]
+	LDR R2, =1 << 20 | 1 << PLLSRC | 1 << 22 @ the last term is for the USB prescaler to be 1
+ 8000272:	f44f 02a2 	mov.w	r2, #5308416	@ 0x510000
+	ORR R1, R2  @ set PLLSRC (use PLL) and PLLMUL to 0100 - bit 20 is 1 (set speed as 6x faster)
+ 8000276:	ea41 0102 	orr.w	r1, r1, r2
+				@ see page 140 of the large manual for options
+				@ NOTE: cannot go faster than 72MHz)
+	STR R1, [R0, #RCC_CFGR] @ store the modified enable register values back to RCC
+ 800027a:	6041      	str	r1, [r0, #4]
+	@ enable PLL (and wait for complete)
+	LDR R0, =RCC @ the base address for the register to turn clocks on/off
+ 800027c:	4839      	ldr	r0, [pc, #228]	@ (8000364 <delay_inner+0x8>)
+	LDR R1, [R0, #RCC_CR] @ load the original value from the enable register
+ 800027e:	6801      	ldr	r1, [r0, #0]
+	ORR R1, 1 << PLLON @ apply the bit mask to turn on the PLL
+ 8000280:	f041 7180 	orr.w	r1, r1, #16777216	@ 0x1000000
+	STR R1, [R0, #RCC_CR] @ store the modified enable register values back to RCC
+ 8000284:	6001      	str	r1, [r0, #0]
+
+08000286 <wait_for_PLLRDY>:
+wait_for_PLLRDY:
+	LDR R1, [R0, #RCC_CR] @ load the original value from the enable register
+ 8000286:	6801      	ldr	r1, [r0, #0]
+	TST R1, 1 << PLLRDY @ Test the HSERDY bit (check if it is 1)
+ 8000288:	f011 7f00 	tst.w	r1, #33554432	@ 0x2000000
+	BEQ wait_for_PLLRDY
+ 800028c:	d0fb      	beq.n	8000286 <wait_for_PLLRDY>
+@ step 3, PLL is ready, switch over the system clock to PLL
+	LDR R0, =RCC  @ load the address of the RCC address boundary (for enabling the IO clock)
+ 800028e:	4835      	ldr	r0, [pc, #212]	@ (8000364 <delay_inner+0x8>)
+	LDR R1, [R0, #RCC_CFGR]  @ load the current value of the peripheral clock registers
+ 8000290:	6841      	ldr	r1, [r0, #4]
+	MOV R2, 1 << 10 | 1 << 1  @ some more settings - bit 1 (SW = 10)  - PLL set as system clock
+ 8000292:	f240 4202 	movw	r2, #1026	@ 0x402
+@ bit 10 (HCLK=100) divided by 2 (clock is faster, need to prescale for peripherals)
+	ORR R1, R2	@ Set the values of these two clocks (turn them on)
+ 8000296:	ea41 0102 	orr.w	r1, r1, r2
+	STR R1, [R0, #RCC_CFGR]  @ store the modified register back to the submodule
+ 800029a:	6041      	str	r1, [r0, #4]
+	LDR R1, [R0, #RCC_CFGR]  @ load the current value of the peripheral clock registers
+ 800029c:	6841      	ldr	r1, [r0, #4]
+	ORR R1, 1 << USBPRE	@ Set the USB prescaler (when PLL is on for the USB)
+ 800029e:	f441 0180 	orr.w	r1, r1, #4194304	@ 0x400000
+	STR R1, [R0, #RCC_CFGR]  @ store the modified register back to the submodule
+ 80002a2:	6041      	str	r1, [r0, #4]
+	BX LR @ return
+ 80002a4:	4770      	bx	lr
+
+080002a6 <initialise_power>:
+
+@ initialise the power systems on the microcontroller
+@ PWREN (enable power to the clock), SYSCFGEN system clock enable
+initialise_power:
+	LDR R0, =RCC @ the base address for the register to turn clocks on/off
+ 80002a6:	482f      	ldr	r0, [pc, #188]	@ (8000364 <delay_inner+0x8>)
+	@ enable clock power in APB1ENR
+	LDR R1, [R0, #APB1ENR]
+ 80002a8:	69c1      	ldr	r1, [r0, #28]
+	ORR R1, 1 << PWREN @ apply the bit mask for power enable
+ 80002aa:	f041 5180 	orr.w	r1, r1, #268435456	@ 0x10000000
+	STR R1, [R0, #APB1ENR]
+ 80002ae:	61c1      	str	r1, [r0, #28]
+	@ enable clock config in APB2ENR
+	LDR R1, [R0, #APB2ENR]
+ 80002b0:	6981      	ldr	r1, [r0, #24]
+	ORR R1, 1 << SYSCFGEN @ apply the bit mask to allow clock configuration
+ 80002b2:	f041 0101 	orr.w	r1, r1, #1
+	STR R1, [R0, #APB2ENR]
+ 80002b6:	6181      	str	r1, [r0, #24]
+	BX LR @ return
+ 80002b8:	4770      	bx	lr
+
+080002ba <main>:
+sent_counter: .byte 0             @ Counter for number of forwarded characters
+echo_msg: .asciz "ECHOING BACK\r\n"  @ Message shown before echoing back
+
+.text
+main:
+    BL initialise_power                @ Power configuration
+ 80002ba:	f7ff fff4 	bl	80002a6 <initialise_power>
+    BL enable_peripheral_clocks       @ Enable GPIO clocks
+ 80002be:	f7ff ff89 	bl	80001d4 <enable_peripheral_clocks>
+    BL initialise_discovery_board     @ Set GPIOE (LEDs) as output
+ 80002c2:	f7ff ff8d 	bl	80001e0 <initialise_discovery_board>
+    BL enable_usart1                  @ Set up USART1 for receive (from PC)
+ 80002c6:	f7ff ff90 	bl	80001ea <enable_usart1>
+    BL enable_uart4                   @ Set up UART4 for transmit (to target)
+ 80002ca:	f7ff ffaa 	bl	8000222 <enable_uart4>
+
+    LDR R6, =incoming_buffer
+ 80002ce:	4e2a      	ldr	r6, [pc, #168]	@ (8000378 <delay_inner+0x1c>)
+	LDR R7, =received_counter
+ 80002d0:	4f2a      	ldr	r7, [pc, #168]	@ (800037c <delay_inner+0x20>)
+	LDRB R7, [R7]
+ 80002d2:	783f      	ldrb	r7, [r7, #0]
+	MOV R8, #0x00
+ 80002d4:	f04f 0800 	mov.w	r8, #0
+	MOV R9, #0x00
+ 80002d8:	f04f 0900 	mov.w	r9, #0
+
+080002dc <loop_forever>:
+@--------------------------------------
+@ Main loop: Receive, store, forward
+@--------------------------------------
+loop_forever:
+    LDR R0, =USART1                   @ Load USART1 base address
+ 80002dc:	4824      	ldr	r0, [pc, #144]	@ (8000370 <delay_inner+0x14>)
+    LDR R1, [R0, USART_ISR]           @ Load USART1 status register
+ 80002de:	69c1      	ldr	r1, [r0, #28]
+
+@ 'AND' the current status with the bit mask that we are interested in
+@ NOTE, the ANDS is used so that if the result is '0' the z register flag is set
+    TST R1,1 << UART_ORE | 1 << UART_FE
+ 80002e0:	f011 0f0a 	tst.w	r1, #10
+    BNE clear_error
+ 80002e4:	d115      	bne.n	8000312 <clear_error>
+
+
+@ 'AND' the current status with the bit mask that we are interested in
+@ NOTE, the ANDS is used so that if the result is '0' the z register flag is set
+    TST R1,1 << UART_RXNE
+ 80002e6:	f011 0f20 	tst.w	r1, #32
+    BEQ loop_forever
+ 80002ea:	d0f7      	beq.n	80002dc <loop_forever>
+
+
+    LDRB R3, [R0, USART_RDR]          @ Read received character into R2
+ 80002ec:	f890 3024 	ldrb.w	r3, [r0, #36]	@ 0x24
+    STRB R3, [R6, R8]
+ 80002f0:	f806 3008 	strb.w	r3, [r6, r8]
+    ADD R8, #1
+ 80002f4:	f108 0801 	add.w	r8, r8, #1
+
+    LDR R4, =terminator               @ Load address of terminator character
+ 80002f8:	4c21      	ldr	r4, [pc, #132]	@ (8000380 <delay_inner+0x24>)
+    LDRB R5, [R4]                     @ Load actual terminator byte into R4
+ 80002fa:	7825      	ldrb	r5, [r4, #0]
+    CMP R3, R4                        @ Compare received character with '*'
+ 80002fc:	42a3      	cmp	r3, r4
+    BEQ found_terminator                     @ If terminator received, jump to echo
+ 80002fe:	d00d      	beq.n	800031c <found_terminator>
+
+   	CMP R7,R8                    	@ Check whether the buffer is exceeded
+ 8000300:	4547      	cmp	r7, r8
+    BGT no_reset
+ 8000302:	dc01      	bgt.n	8000308 <no_reset>
+    MOV R8,#0
+ 8000304:	f04f 0800 	mov.w	r8, #0
+
+08000308 <no_reset>:
+
+no_reset:
+    LDR R1, [R0, USART_RQR]
+ 8000308:	6981      	ldr	r1, [r0, #24]
+    ORR R1, 1 << UART_RXFRQ
+ 800030a:	f041 0108 	orr.w	r1, r1, #8
+    STR R1, [R0, USART_RQR]
+ 800030e:	6181      	str	r1, [r0, #24]
+
+    B loop_forever
+ 8000310:	e7e4      	b.n	80002dc <loop_forever>
+
+08000312 <clear_error>:
+
+clear_error:
+    LDR R1, [R0, USART_ICR]
+ 8000312:	6a01      	ldr	r1, [r0, #32]
+    ORR R1, 1 << UART_ORECF | 1 << UART_FECF
+ 8000314:	f041 0108 	orr.w	r1, r1, #8
+    STR R1, [R0, USART_ICR]
+ 8000318:	6201      	str	r1, [r0, #32]
+    B loop_forever
+ 800031a:	e7df      	b.n	80002dc <loop_forever>
+
+0800031c <found_terminator>:
+
+
+
+found_terminator:
+    MOV R9,R8
+ 800031c:	46c1      	mov	r9, r8
+    B tx_loop
+ 800031e:	e7ff      	b.n	8000320 <tx_loop>
+
+08000320 <tx_loop>:
+
+@ The transfer function is used to transfer previously saved data
+tx_loop:
+    LDR R0,=UART4
+ 8000320:	4814      	ldr	r0, [pc, #80]	@ (8000374 <delay_inner+0x18>)
+    LDR R3,=incoming_buffer
+ 8000322:	4b15      	ldr	r3, [pc, #84]	@ (8000378 <delay_inner+0x1c>)
+    MOV R4,R9
+ 8000324:	464c      	mov	r4, r9
+
+08000326 <tx_uart>:
+
+tx_uart:
+    LDR R1,[R0, USART_ISR]
+ 8000326:	69c1      	ldr	r1, [r0, #28]
+    TST R1,1 << UART_TXE
+ 8000328:	f011 0f80 	tst.w	r1, #128	@ 0x80
+    BEQ tx_uart
+ 800032c:	d0fb      	beq.n	8000326 <tx_uart>
+
+    LDRB R5,[R3], #1
+ 800032e:	f813 5b01 	ldrb.w	r5, [r3], #1
+    STRB R5,[R0, USART_TDR]
+ 8000332:	f880 5028 	strb.w	r5, [r0, #40]	@ 0x28
+    SUBS R4,#1
+ 8000336:	3c01      	subs	r4, #1
+    BGT tx_uart
+ 8000338:	dcf5      	bgt.n	8000326 <tx_uart>
+    LDR R3,=echo_msg
+ 800033a:	4b12      	ldr	r3, [pc, #72]	@ (8000384 <delay_inner+0x28>)
+
+0800033c <tx_success_loop>:
+
+@ Transfer message Success
+tx_success_loop:
+    LDRB R5,[R3],#1
+ 800033c:	f813 5b01 	ldrb.w	r5, [r3], #1
+    CMP R5,#0
+ 8000340:	2d00      	cmp	r5, #0
+    BEQ restart_loop
+ 8000342:	d006      	beq.n	8000352 <restart_loop>
+
+08000344 <tx_uart_success>:
+
+tx_uart_success:
+    LDR R1,[R0, USART_ISR]
+ 8000344:	69c1      	ldr	r1, [r0, #28]
+    TST R1,1 << UART_TXE
+ 8000346:	f011 0f80 	tst.w	r1, #128	@ 0x80
+    BEQ tx_uart_success
+ 800034a:	d0fb      	beq.n	8000344 <tx_uart_success>
+
+    STRB R5,[R0, USART_TDR]
+ 800034c:	f880 5028 	strb.w	r5, [r0, #40]	@ 0x28
+    B tx_success_loop
+ 8000350:	e7f4      	b.n	800033c <tx_success_loop>
+
+08000352 <restart_loop>:
+
+@Empty the counter and wait to return to the next accept and transfer
+restart_loop:
+    MOV R8, #0
+ 8000352:	f04f 0800 	mov.w	r8, #0
+    B loop_forever
+ 8000356:	e7c1      	b.n	80002dc <loop_forever>
+
+08000358 <delay_loop>:
+
+delay_loop:
+    LDR R9, =0xfffff
+ 8000358:	f8df 902c 	ldr.w	r9, [pc, #44]	@ 8000388 <delay_inner+0x2c>
+
+0800035c <delay_inner>:
+delay_inner:
+    SUBS R9, #1
+ 800035c:	f1b9 0901 	subs.w	r9, r9, #1
+    BGT delay_inner
+ 8000360:	dcfc      	bgt.n	800035c <delay_inner>
+    BX LR
+ 8000362:	4770      	bx	lr
+	LDR R0, =RCC
+ 8000364:	40021000 	.word	0x40021000
+	LDR R0, =GPIOE 	@ load the address of the GPIOE register into R0
+ 8000368:	48001000 	.word	0x48001000
+	LDR R0, =GPIOC
+ 800036c:	48000800 	.word	0x48000800
+	LDR R0, =USART1 @ the base address for the register to turn clocks on/off
+ 8000370:	40013800 	.word	0x40013800
+	LDR R0, =UART4 @ the base address for the register to turn clocks on/off
+ 8000374:	40004c00 	.word	0x40004c00
+    LDR R6, =incoming_buffer
+ 8000378:	20000000 	.word	0x20000000
+	LDR R7, =received_counter
+ 800037c:	20000040 	.word	0x20000040
+    LDR R4, =terminator               @ Load address of terminator character
+ 8000380:	2000003e 	.word	0x2000003e
+    LDR R3,=echo_msg
+ 8000384:	20000042 	.word	0x20000042
+    LDR R9, =0xfffff
+ 8000388:	000fffff 	.word	0x000fffff
+
+0800038c <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 800038c:	480d      	ldr	r0, [pc, #52]	@ (80003c4 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 800038e:	4685      	mov	sp, r0
+/* Call the clock system initialization function.*/
+  bl  SystemInit
+ 8000390:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 8000394:	480c      	ldr	r0, [pc, #48]	@ (80003c8 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 8000396:	490d      	ldr	r1, [pc, #52]	@ (80003cc <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 8000398:	4a0d      	ldr	r2, [pc, #52]	@ (80003d0 <LoopForever+0xe>)
+  movs r3, #0
+ 800039a:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 800039c:	e002      	b.n	80003a4 <LoopCopyDataInit>
+
+0800039e <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 800039e:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 80003a0:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 80003a2:	3304      	adds	r3, #4
+
+080003a4 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 80003a4:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 80003a6:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 80003a8:	d3f9      	bcc.n	800039e <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 80003aa:	4a0a      	ldr	r2, [pc, #40]	@ (80003d4 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 80003ac:	4c0a      	ldr	r4, [pc, #40]	@ (80003d8 <LoopForever+0x16>)
+  movs r3, #0
+ 80003ae:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 80003b0:	e001      	b.n	80003b6 <LoopFillZerobss>
+
+080003b2 <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 80003b2:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 80003b4:	3204      	adds	r2, #4
+
+080003b6 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 80003b6:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 80003b8:	d3fb      	bcc.n	80003b2 <FillZerobss>
+
+/* Call static constructors */
+  bl __libc_init_array
+ 80003ba:	f000 f811 	bl	80003e0 <__libc_init_array>
+/* Call the application's entry point.*/
+  bl main
+ 80003be:	f7ff ff7c 	bl	80002ba <main>
+
+080003c2 <LoopForever>:
+
+LoopForever:
+  b LoopForever
+ 80003c2:	e7fe      	b.n	80003c2 <LoopForever>
+  ldr   r0, =_estack
+ 80003c4:	2000a000 	.word	0x2000a000
+  ldr r0, =_sdata
+ 80003c8:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 80003cc:	20000054 	.word	0x20000054
+  ldr r2, =_sidata
+ 80003d0:	08000448 	.word	0x08000448
+  ldr r2, =_sbss
+ 80003d4:	20000054 	.word	0x20000054
+  ldr r4, =_ebss
+ 80003d8:	20000070 	.word	0x20000070
+
+080003dc <ADC1_2_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 80003dc:	e7fe      	b.n	80003dc <ADC1_2_IRQHandler>
+	...
+
+080003e0 <__libc_init_array>:
+ 80003e0:	b570      	push	{r4, r5, r6, lr}
+ 80003e2:	4d0d      	ldr	r5, [pc, #52]	@ (8000418 <__libc_init_array+0x38>)
+ 80003e4:	4c0d      	ldr	r4, [pc, #52]	@ (800041c <__libc_init_array+0x3c>)
+ 80003e6:	1b64      	subs	r4, r4, r5
+ 80003e8:	10a4      	asrs	r4, r4, #2
+ 80003ea:	2600      	movs	r6, #0
+ 80003ec:	42a6      	cmp	r6, r4
+ 80003ee:	d109      	bne.n	8000404 <__libc_init_array+0x24>
+ 80003f0:	4d0b      	ldr	r5, [pc, #44]	@ (8000420 <__libc_init_array+0x40>)
+ 80003f2:	4c0c      	ldr	r4, [pc, #48]	@ (8000424 <__libc_init_array+0x44>)
+ 80003f4:	f000 f818 	bl	8000428 <_init>
+ 80003f8:	1b64      	subs	r4, r4, r5
+ 80003fa:	10a4      	asrs	r4, r4, #2
+ 80003fc:	2600      	movs	r6, #0
+ 80003fe:	42a6      	cmp	r6, r4
+ 8000400:	d105      	bne.n	800040e <__libc_init_array+0x2e>
+ 8000402:	bd70      	pop	{r4, r5, r6, pc}
+ 8000404:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000408:	4798      	blx	r3
+ 800040a:	3601      	adds	r6, #1
+ 800040c:	e7ee      	b.n	80003ec <__libc_init_array+0xc>
+ 800040e:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000412:	4798      	blx	r3
+ 8000414:	3601      	adds	r6, #1
+ 8000416:	e7f2      	b.n	80003fe <__libc_init_array+0x1e>
+ 8000418:	08000440 	.word	0x08000440
+ 800041c:	08000440 	.word	0x08000440
+ 8000420:	08000440 	.word	0x08000440
+ 8000424:	08000444 	.word	0x08000444
+
+08000428 <_init>:
+ 8000428:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 800042a:	bf00      	nop
+ 800042c:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 800042e:	bc08      	pop	{r3}
+ 8000430:	469e      	mov	lr, r3
+ 8000432:	4770      	bx	lr
+
+08000434 <_fini>:
+ 8000434:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000436:	bf00      	nop
+ 8000438:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 800043a:	bc08      	pop	{r3}
+ 800043c:	469e      	mov	lr, r3
+ 800043e:	4770      	bx	lr
