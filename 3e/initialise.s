@@ -17,7 +17,7 @@ initialise_discovery_board:
 	LDR R0, =GPIOE 	@ load the address of the GPIOE register into R0
 	LDR R1, =0x5555  @ load the binary value of 01 (OUTPUT) for each port in the upper two bytes
 					 @ as 0x5555 = 01010101 01010101
-	STRH R1, [R0, #MODER + 2]   @ store the new register values in the top half word representing
+	STRH R1, [R0, #GPIO_MODER + 2]   @ store the new register values in the top half word representing
 								@ the MODER settings for pe8-15
 	BX LR @ return from function call
 
@@ -67,7 +67,7 @@ enable_uart4:
 	LDR R0, =GPIOC
 	@ set the alternate function for the UART pins (what ever you have selected)
 	LDR R1, =0x55
-	STRB R1, [R0, AFRL + 2]
+	STRB R1, [R0, AFRH + 1]
 	@ modify the mode of the GPIO pins you want to use to enable 'alternate function mode'
 	LDR R1, [R0, GPIO_MODER]
 	ORR R1, 0xA00 @ Mask for pins to change to 'alternate function mode'
@@ -152,4 +152,3 @@ initialise_power:
 	ORR R1, 1 << SYSCFGEN @ apply the bit mask to allow clock configuration
 	STR R1, [R0, #APB2ENR]
 	BX LR @ return
-
