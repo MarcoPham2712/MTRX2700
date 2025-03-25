@@ -29,13 +29,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  12 .ARM.attributes 00000030  00000000  00000000  00002054  2**0
                   CONTENTS, READONLY
- 13 .debug_line   00000181  00000000  00000000  00002084  2**0
+ 13 .debug_line   0000017f  00000000  00000000  00002084  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_line_str 00000081  00000000  00000000  00002205  2**0
+ 14 .debug_line_str 00000081  00000000  00000000  00002203  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_info   00000055  00000000  00000000  00002286  2**0
+ 15 .debug_info   00000055  00000000  00000000  00002284  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_abbrev 00000038  00000000  00000000  000022db  2**0
+ 16 .debug_abbrev 00000038  00000000  00000000  000022d9  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_aranges 00000048  00000000  00000000  00002318  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -83,7 +83,7 @@ Disassembly of section .text:
 enable_peripheral_clocks:
 	@ load the address of the RCC address boundary (for enabling the IO clock)
 	LDR R0, =RCC
- 80001d4:	4863      	ldr	r0, [pc, #396]	@ (8000364 <delay_inner+0x8>)
+ 80001d4:	4863      	ldr	r0, [pc, #396]	@ (8000364 <delay_inner+0xa>)
 	@ enable all of the GPIO peripherals in AHBENR
 	LDR R1, [R0, #AHBENR]
  80001d6:	6941      	ldr	r1, [r0, #20]
@@ -99,7 +99,7 @@ enable_peripheral_clocks:
 @ initialise the discovery board I/O (just outputs: inputs are selected by default)
 initialise_discovery_board:
 	LDR R0, =GPIOE 	@ load the address of the GPIOE register into R0
- 80001e0:	4861      	ldr	r0, [pc, #388]	@ (8000368 <delay_inner+0xc>)
+ 80001e0:	4861      	ldr	r0, [pc, #388]	@ (8000368 <delay_inner+0xe>)
 	LDR R1, =0x5555  @ load the binary value of 01 (OUTPUT) for each port in the upper two bytes
  80001e2:	f245 5155 	movw	r1, #21845	@ 0x5555
 					 @ as 0x5555 = 01010101 01010101
@@ -116,7 +116,7 @@ enable_usart1:
 	@make a note about the different ways that we set specific bits in this configuration section
 	@ select which UART you want to enable
 	LDR R0, =GPIOC
- 80001ea:	4860      	ldr	r0, [pc, #384]	@ (800036c <delay_inner+0x10>)
+ 80001ea:	4860      	ldr	r0, [pc, #384]	@ (800036c <delay_inner+0x12>)
 	@ set the alternate function for the UART pins (what ever you have selected)
 	LDR R1, =0x77
  80001ec:	f04f 0177 	mov.w	r1, #119	@ 0x77
@@ -140,7 +140,7 @@ enable_usart1:
 	@ Note: this might be in APB1ENR or APB2ENR
 	@ you can find this out by looking in the datasheet
 	LDR R0, =RCC @ the base address for the register to turn clocks on/off
- 8000204:	4857      	ldr	r0, [pc, #348]	@ (8000364 <delay_inner+0x8>)
+ 8000204:	4857      	ldr	r0, [pc, #348]	@ (8000364 <delay_inner+0xa>)
 	LDR R1, [R0, #APB2ENR] @ load the original value from the enable register
  8000206:	6981      	ldr	r1, [r0, #24]
 	ORR R1, 1 << USART1_EN  @ apply the bit mask to the previous values of the enable the UART
@@ -151,13 +151,13 @@ enable_usart1:
 	MOV R1, #0x46 @ from our earlier calculations (for 8MHz), store this in register R1
  800020e:	f04f 0146 	mov.w	r1, #70	@ 0x46
 	LDR R0, =USART1 @ the base address for the register to turn clocks on/off
- 8000212:	4857      	ldr	r0, [pc, #348]	@ (8000370 <delay_inner+0x14>)
+ 8000212:	4857      	ldr	r0, [pc, #348]	@ (8000370 <delay_inner+0x16>)
 	STRH R1, [R0, #USART_BRR] @ store this value directly in the first half word (16 bits) of
  8000214:	8181      	strh	r1, [r0, #12]
 							  	 @ the baud rate register
 	@ we want to set a few things here, lets define their bit positions to make it more readable
 	LDR R0, =USART1 @ the base address for the register to set up the specified UART
- 8000216:	4856      	ldr	r0, [pc, #344]	@ (8000370 <delay_inner+0x14>)
+ 8000216:	4856      	ldr	r0, [pc, #344]	@ (8000370 <delay_inner+0x16>)
 	LDR R1, [R0, #USART_CR1] @ load the original value from the enable register
  8000218:	6801      	ldr	r1, [r0, #0]
 	ORR R1, 1 << UART_TE | 1 << UART_RE | 1 << UART_UE @ make a bit mask with a '1' for the bits to enable,
@@ -175,7 +175,7 @@ enable_uart4:
 	@make a note about the different ways that we set specific bits in this configuration section
 	@ select which UART you want to enable
 	LDR R0, =GPIOC
- 8000222:	4852      	ldr	r0, [pc, #328]	@ (800036c <delay_inner+0x10>)
+ 8000222:	4852      	ldr	r0, [pc, #328]	@ (800036c <delay_inner+0x12>)
 	@ set the alternate function for the UART pins (what ever you have selected)
 	LDR R1, =0x55
  8000224:	f04f 0155 	mov.w	r1, #85	@ 0x55
@@ -199,7 +199,7 @@ enable_uart4:
 	@ Note: this might be in APB1ENR or APB2ENR
 	@ you can find this out by looking in the datasheet
 	LDR R0, =RCC @ the base address for the register to turn clocks on/off
- 800023c:	4849      	ldr	r0, [pc, #292]	@ (8000364 <delay_inner+0x8>)
+ 800023c:	4849      	ldr	r0, [pc, #292]	@ (8000364 <delay_inner+0xa>)
 	LDR R1, [R0, #APB1ENR] @ load the original value from the enable register
  800023e:	69c1      	ldr	r1, [r0, #28]
 	ORR R1, 1 << UART4_EN  @ apply the bit mask to the previous values of the enable the UART
@@ -210,13 +210,13 @@ enable_uart4:
 	MOV R1, #0x46 @ from our earlier calculations (for 8MHz), store this in register R1
  8000246:	f04f 0146 	mov.w	r1, #70	@ 0x46
 	LDR R0, =UART4 @ the base address for the register to turn clocks on/off
- 800024a:	484a      	ldr	r0, [pc, #296]	@ (8000374 <delay_inner+0x18>)
+ 800024a:	484a      	ldr	r0, [pc, #296]	@ (8000374 <delay_inner+0x1a>)
 	STRH R1, [R0, #USART_BRR] @ store this value directly in the first half word (16 bits) of
  800024c:	8181      	strh	r1, [r0, #12]
 							  	 @ the baud rate register
 	@ we want to set a few things here, lets define their bit positions to make it more readable
 	LDR R0, =UART4 @ the base address for the register to set up the specified UART
- 800024e:	4849      	ldr	r0, [pc, #292]	@ (8000374 <delay_inner+0x18>)
+ 800024e:	4849      	ldr	r0, [pc, #292]	@ (8000374 <delay_inner+0x1a>)
 	LDR R1, [R0, #USART_CR1] @ load the original value from the enable register
  8000250:	6801      	ldr	r1, [r0, #0]
 	ORR R1, 1 << UART_TE | 1 << UART_RE | 1 << UART_UE @ make a bit mask with a '1' for the bits to enable,
@@ -234,7 +234,7 @@ change_clock_speed:
 @ step 1, set clock to HSE (the external clock)
 	@ enable HSE (and wait for complete)
 	LDR R0, =RCC @ the base address for the register to turn clocks on/off
- 800025a:	4842      	ldr	r0, [pc, #264]	@ (8000364 <delay_inner+0x8>)
+ 800025a:	4842      	ldr	r0, [pc, #264]	@ (8000364 <delay_inner+0xa>)
 	LDR R1, [R0, #RCC_CR] @ load the original value from the enable register
  800025c:	6801      	ldr	r1, [r0, #0]
 	LDR R2, =1 << HSEBYP | 1 << HSEON @ make a bit mask with a '1' in the 0th bit position
@@ -267,7 +267,7 @@ wait_for_HSERDY:
  800027a:	6041      	str	r1, [r0, #4]
 	@ enable PLL (and wait for complete)
 	LDR R0, =RCC @ the base address for the register to turn clocks on/off
- 800027c:	4839      	ldr	r0, [pc, #228]	@ (8000364 <delay_inner+0x8>)
+ 800027c:	4839      	ldr	r0, [pc, #228]	@ (8000364 <delay_inner+0xa>)
 	LDR R1, [R0, #RCC_CR] @ load the original value from the enable register
  800027e:	6801      	ldr	r1, [r0, #0]
 	ORR R1, 1 << PLLON @ apply the bit mask to turn on the PLL
@@ -285,7 +285,7 @@ wait_for_PLLRDY:
  800028c:	d0fb      	beq.n	8000286 <wait_for_PLLRDY>
 @ step 3, PLL is ready, switch over the system clock to PLL
 	LDR R0, =RCC  @ load the address of the RCC address boundary (for enabling the IO clock)
- 800028e:	4835      	ldr	r0, [pc, #212]	@ (8000364 <delay_inner+0x8>)
+ 800028e:	4835      	ldr	r0, [pc, #212]	@ (8000364 <delay_inner+0xa>)
 	LDR R1, [R0, #RCC_CFGR]  @ load the current value of the peripheral clock registers
  8000290:	6841      	ldr	r1, [r0, #4]
 	MOV R2, 1 << 10 | 1 << 1  @ some more settings - bit 1 (SW = 10)  - PLL set as system clock
@@ -310,7 +310,7 @@ wait_for_PLLRDY:
 @ PWREN (enable power to the clock), SYSCFGEN system clock enable
 initialise_power:
 	LDR R0, =RCC @ the base address for the register to turn clocks on/off
- 80002a6:	482f      	ldr	r0, [pc, #188]	@ (8000364 <delay_inner+0x8>)
+ 80002a6:	482f      	ldr	r0, [pc, #188]	@ (8000364 <delay_inner+0xa>)
 	@ enable clock power in APB1ENR
 	LDR R1, [R0, #APB1ENR]
  80002a8:	69c1      	ldr	r1, [r0, #28]
@@ -330,13 +330,13 @@ initialise_power:
 
 080002ba <main>:
 sent_counter: .byte 0             @ Counter for number of forwarded characters
-echo_msg: .asciz "ECHOING BACK\r\n"  @ Message shown before echoing back
+echo_msg: .asciz "ECHOING BACK\r\n"  @Message shown before echoing back
 
 .text
 main:
-    BL initialise_power                @ Power configuration
+    BL initialise_power                @Power configuration
  80002ba:	f7ff fff4 	bl	80002a6 <initialise_power>
-    BL enable_peripheral_clocks       @ Enable GPIO clocks
+    BL enable_peripheral_clocks       @Enable GPIO clocks
  80002be:	f7ff ff89 	bl	80001d4 <enable_peripheral_clocks>
     BL initialise_discovery_board     @ Set GPIOE (LEDs) as output
  80002c2:	f7ff ff8d 	bl	80001e0 <initialise_discovery_board>
@@ -345,182 +345,182 @@ main:
     BL enable_uart4                   @ Set up UART4 for transmit (to target)
  80002ca:	f7ff ffaa 	bl	8000222 <enable_uart4>
 
+	LDR R5, =terminator
+ 80002ce:	4d2a      	ldr	r5, [pc, #168]	@ (8000378 <delay_inner+0x1e>)
+    LDRB R5, [R5]
+ 80002d0:	782d      	ldrb	r5, [r5, #0]
     LDR R6, =incoming_buffer
- 80002ce:	4e2a      	ldr	r6, [pc, #168]	@ (8000378 <delay_inner+0x1c>)
+ 80002d2:	4e2a      	ldr	r6, [pc, #168]	@ (800037c <delay_inner+0x22>)
 	LDR R7, =received_counter
- 80002d0:	4f2a      	ldr	r7, [pc, #168]	@ (800037c <delay_inner+0x20>)
+ 80002d4:	4f2a      	ldr	r7, [pc, #168]	@ (8000380 <delay_inner+0x26>)
 	LDRB R7, [R7]
- 80002d2:	783f      	ldrb	r7, [r7, #0]
+ 80002d6:	783f      	ldrb	r7, [r7, #0]
 	MOV R8, #0x00
- 80002d4:	f04f 0800 	mov.w	r8, #0
+ 80002d8:	f04f 0800 	mov.w	r8, #0
 	MOV R9, #0x00
- 80002d8:	f04f 0900 	mov.w	r9, #0
+ 80002dc:	f04f 0900 	mov.w	r9, #0
 
-080002dc <loop_forever>:
+080002e0 <loop_forever>:
 @--------------------------------------
 @ Main loop: Receive, store, forward
 @--------------------------------------
 loop_forever:
     LDR R0, =USART1                   @ Load USART1 base address
- 80002dc:	4824      	ldr	r0, [pc, #144]	@ (8000370 <delay_inner+0x14>)
+ 80002e0:	4823      	ldr	r0, [pc, #140]	@ (8000370 <delay_inner+0x16>)
     LDR R1, [R0, USART_ISR]           @ Load USART1 status register
- 80002de:	69c1      	ldr	r1, [r0, #28]
+ 80002e2:	69c1      	ldr	r1, [r0, #28]
 
 @ 'AND' the current status with the bit mask that we are interested in
 @ NOTE, the ANDS is used so that if the result is '0' the z register flag is set
     TST R1,1 << UART_ORE | 1 << UART_FE
- 80002e0:	f011 0f0a 	tst.w	r1, #10
+ 80002e4:	f011 0f0a 	tst.w	r1, #10
     BNE clear_error
- 80002e4:	d115      	bne.n	8000312 <clear_error>
+ 80002e8:	d111      	bne.n	800030e <clear_error>
 
 
 @ 'AND' the current status with the bit mask that we are interested in
 @ NOTE, the ANDS is used so that if the result is '0' the z register flag is set
     TST R1,1 << UART_RXNE
- 80002e6:	f011 0f20 	tst.w	r1, #32
+ 80002ea:	f011 0f20 	tst.w	r1, #32
     BEQ loop_forever
- 80002ea:	d0f7      	beq.n	80002dc <loop_forever>
+ 80002ee:	d0f7      	beq.n	80002e0 <loop_forever>
 
 
     LDRB R3, [R0, USART_RDR]          @ Read received character into R2
- 80002ec:	f890 3024 	ldrb.w	r3, [r0, #36]	@ 0x24
+ 80002f0:	f890 3024 	ldrb.w	r3, [r0, #36]	@ 0x24
     STRB R3, [R6, R8]
- 80002f0:	f806 3008 	strb.w	r3, [r6, r8]
+ 80002f4:	f806 3008 	strb.w	r3, [r6, r8]
     ADD R8, #1
- 80002f4:	f108 0801 	add.w	r8, r8, #1
+ 80002f8:	f108 0801 	add.w	r8, r8, #1
 
-    LDR R4, =terminator               @ Load address of terminator character
- 80002f8:	4c21      	ldr	r4, [pc, #132]	@ (8000380 <delay_inner+0x24>)
-    LDRB R5, [R4]                     @ Load actual terminator byte into R4
- 80002fa:	7825      	ldrb	r5, [r4, #0]
-    CMP R3, R4                        @ Compare received character with '*'
- 80002fc:	42a3      	cmp	r3, r4
+    CMP R3, R5                        @ Compare received character with '*'
+ 80002fc:	42ab      	cmp	r3, r5
     BEQ found_terminator                     @ If terminator received, jump to echo
- 80002fe:	d00d      	beq.n	800031c <found_terminator>
+ 80002fe:	d00b      	beq.n	8000318 <found_terminator>
 
    	CMP R7,R8                    	@ Check whether the buffer is exceeded
  8000300:	4547      	cmp	r7, r8
     BGT no_reset
- 8000302:	dc01      	bgt.n	8000308 <no_reset>
-    MOV R8,#0
- 8000304:	f04f 0800 	mov.w	r8, #0
+ 8000302:	dcff      	bgt.n	8000304 <no_reset>
 
-08000308 <no_reset>:
+08000304 <no_reset>:
+
 
 no_reset:
     LDR R1, [R0, USART_RQR]
- 8000308:	6981      	ldr	r1, [r0, #24]
+ 8000304:	6981      	ldr	r1, [r0, #24]
     ORR R1, 1 << UART_RXFRQ
- 800030a:	f041 0108 	orr.w	r1, r1, #8
+ 8000306:	f041 0108 	orr.w	r1, r1, #8
     STR R1, [R0, USART_RQR]
- 800030e:	6181      	str	r1, [r0, #24]
+ 800030a:	6181      	str	r1, [r0, #24]
 
     B loop_forever
- 8000310:	e7e4      	b.n	80002dc <loop_forever>
+ 800030c:	e7e8      	b.n	80002e0 <loop_forever>
 
-08000312 <clear_error>:
+0800030e <clear_error>:
 
 clear_error:
     LDR R1, [R0, USART_ICR]
- 8000312:	6a01      	ldr	r1, [r0, #32]
+ 800030e:	6a01      	ldr	r1, [r0, #32]
     ORR R1, 1 << UART_ORECF | 1 << UART_FECF
- 8000314:	f041 0108 	orr.w	r1, r1, #8
+ 8000310:	f041 0108 	orr.w	r1, r1, #8
     STR R1, [R0, USART_ICR]
- 8000318:	6201      	str	r1, [r0, #32]
+ 8000314:	6201      	str	r1, [r0, #32]
     B loop_forever
- 800031a:	e7df      	b.n	80002dc <loop_forever>
+ 8000316:	e7e3      	b.n	80002e0 <loop_forever>
 
-0800031c <found_terminator>:
+08000318 <found_terminator>:
 
 
 
 found_terminator:
     MOV R9,R8
- 800031c:	46c1      	mov	r9, r8
+ 8000318:	46c1      	mov	r9, r8
     B tx_loop
- 800031e:	e7ff      	b.n	8000320 <tx_loop>
+ 800031a:	e7ff      	b.n	800031c <tx_loop>
 
-08000320 <tx_loop>:
+0800031c <tx_loop>:
 
 @ The transfer function is used to transfer previously saved data
 tx_loop:
     LDR R0,=UART4
- 8000320:	4814      	ldr	r0, [pc, #80]	@ (8000374 <delay_inner+0x18>)
+ 800031c:	4815      	ldr	r0, [pc, #84]	@ (8000374 <delay_inner+0x1a>)
     LDR R3,=incoming_buffer
- 8000322:	4b15      	ldr	r3, [pc, #84]	@ (8000378 <delay_inner+0x1c>)
+ 800031e:	4b17      	ldr	r3, [pc, #92]	@ (800037c <delay_inner+0x22>)
     MOV R4,R9
- 8000324:	464c      	mov	r4, r9
+ 8000320:	464c      	mov	r4, r9
 
-08000326 <tx_uart>:
+08000322 <tx_uart>:
 
 tx_uart:
     LDR R1,[R0, USART_ISR]
- 8000326:	69c1      	ldr	r1, [r0, #28]
+ 8000322:	69c1      	ldr	r1, [r0, #28]
     TST R1,1 << UART_TXE
- 8000328:	f011 0f80 	tst.w	r1, #128	@ 0x80
+ 8000324:	f011 0f80 	tst.w	r1, #128	@ 0x80
     BEQ tx_uart
- 800032c:	d0fb      	beq.n	8000326 <tx_uart>
+ 8000328:	d0fb      	beq.n	8000322 <tx_uart>
 
     LDRB R5,[R3], #1
- 800032e:	f813 5b01 	ldrb.w	r5, [r3], #1
+ 800032a:	f813 5b01 	ldrb.w	r5, [r3], #1
     STRB R5,[R0, USART_TDR]
- 8000332:	f880 5028 	strb.w	r5, [r0, #40]	@ 0x28
-    SUBS R4,#1
- 8000336:	3c01      	subs	r4, #1
+ 800032e:	f880 5028 	strb.w	r5, [r0, #40]	@ 0x28
+    SUBS R9,#1
+ 8000332:	f1b9 0901 	subs.w	r9, r9, #1
     BGT tx_uart
- 8000338:	dcf5      	bgt.n	8000326 <tx_uart>
+ 8000336:	dcf4      	bgt.n	8000322 <tx_uart>
     LDR R3,=echo_msg
- 800033a:	4b12      	ldr	r3, [pc, #72]	@ (8000384 <delay_inner+0x28>)
+ 8000338:	4b12      	ldr	r3, [pc, #72]	@ (8000384 <delay_inner+0x2a>)
 
-0800033c <tx_success_loop>:
+0800033a <tx_success_loop>:
 
 @ Transfer message Success
 tx_success_loop:
     LDRB R5,[R3],#1
- 800033c:	f813 5b01 	ldrb.w	r5, [r3], #1
+ 800033a:	f813 5b01 	ldrb.w	r5, [r3], #1
     CMP R5,#0
- 8000340:	2d00      	cmp	r5, #0
+ 800033e:	2d00      	cmp	r5, #0
     BEQ restart_loop
- 8000342:	d006      	beq.n	8000352 <restart_loop>
+ 8000340:	d006      	beq.n	8000350 <restart_loop>
 
-08000344 <tx_uart_success>:
+08000342 <tx_uart_success>:
 
 tx_uart_success:
     LDR R1,[R0, USART_ISR]
- 8000344:	69c1      	ldr	r1, [r0, #28]
+ 8000342:	69c1      	ldr	r1, [r0, #28]
     TST R1,1 << UART_TXE
- 8000346:	f011 0f80 	tst.w	r1, #128	@ 0x80
+ 8000344:	f011 0f80 	tst.w	r1, #128	@ 0x80
     BEQ tx_uart_success
- 800034a:	d0fb      	beq.n	8000344 <tx_uart_success>
+ 8000348:	d0fb      	beq.n	8000342 <tx_uart_success>
 
     STRB R5,[R0, USART_TDR]
- 800034c:	f880 5028 	strb.w	r5, [r0, #40]	@ 0x28
+ 800034a:	f880 5028 	strb.w	r5, [r0, #40]	@ 0x28
     B tx_success_loop
- 8000350:	e7f4      	b.n	800033c <tx_success_loop>
+ 800034e:	e7f4      	b.n	800033a <tx_success_loop>
 
-08000352 <restart_loop>:
+08000350 <restart_loop>:
 
 @Empty the counter and wait to return to the next accept and transfer
 restart_loop:
     MOV R8, #0
- 8000352:	f04f 0800 	mov.w	r8, #0
+ 8000350:	f04f 0800 	mov.w	r8, #0
     B loop_forever
- 8000356:	e7c1      	b.n	80002dc <loop_forever>
+ 8000354:	e7c4      	b.n	80002e0 <loop_forever>
 
-08000358 <delay_loop>:
+08000356 <delay_loop>:
 
 delay_loop:
     LDR R9, =0xfffff
- 8000358:	f8df 902c 	ldr.w	r9, [pc, #44]	@ 8000388 <delay_inner+0x2c>
+ 8000356:	f8df 9030 	ldr.w	r9, [pc, #48]	@ 8000388 <delay_inner+0x2e>
 
-0800035c <delay_inner>:
+0800035a <delay_inner>:
 delay_inner:
     SUBS R9, #1
- 800035c:	f1b9 0901 	subs.w	r9, r9, #1
+ 800035a:	f1b9 0901 	subs.w	r9, r9, #1
     BGT delay_inner
- 8000360:	dcfc      	bgt.n	800035c <delay_inner>
+ 800035e:	dcfc      	bgt.n	800035a <delay_inner>
     BX LR
- 8000362:	4770      	bx	lr
+ 8000360:	4770      	bx	lr
+ 8000362:	0000      	.short	0x0000
 	LDR R0, =RCC
  8000364:	40021000 	.word	0x40021000
 	LDR R0, =GPIOE 	@ load the address of the GPIOE register into R0
@@ -531,12 +531,12 @@ delay_inner:
  8000370:	40013800 	.word	0x40013800
 	LDR R0, =UART4 @ the base address for the register to turn clocks on/off
  8000374:	40004c00 	.word	0x40004c00
+	LDR R5, =terminator
+ 8000378:	2000003e 	.word	0x2000003e
     LDR R6, =incoming_buffer
- 8000378:	20000000 	.word	0x20000000
+ 800037c:	20000000 	.word	0x20000000
 	LDR R7, =received_counter
- 800037c:	20000040 	.word	0x20000040
-    LDR R4, =terminator               @ Load address of terminator character
- 8000380:	2000003e 	.word	0x2000003e
+ 8000380:	20000040 	.word	0x20000040
     LDR R3,=echo_msg
  8000384:	20000042 	.word	0x20000042
     LDR R9, =0xfffff
