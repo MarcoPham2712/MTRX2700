@@ -113,6 +113,7 @@ The program under discussion is based on the STM32 microcontroller, which has a 
 
 #### 4c.
 Summary: 
+In order to achieve a more accurate and fully hardware-controlled delay function, it is necessary to use the auto reload mechanism of the STM32 timer. Initially, the prescaler (TIM_PSC) and the auto-reload register (TIM_ARR) must be configured, and the auto-reload function (ARPE=1) must be enabled, thereby ensuring that the timer automatically resets to 0 once the count reaches the predetermined value. After starting the timer, the program simply detects the UIF bit in the status register (TIM_SR) to determine if an update event has occurred. Once UIF is set, it means that a timing cycle has been completed, and then you can execute the required delay action and clear UIF.
 
 
 
