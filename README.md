@@ -104,7 +104,7 @@ Part C: Shirui
 In this task, the Hardware Timers of the STM32 microcontroller must be used for the precise implementation of the delay and timing functions. The delay function is achieved by configuring the relevant register parameters of timer. These precise delays enable the control of hardware cycles, such as the lighting of LEDs, timed transmissions, etc.
 #### 4a.
 Summary: 
-
+In task 4a, the program is required to initialise the TIM2 timer and GPIO clock, and to configure GPIOE to LED output mode. The prescaler of TIM2 should be set so that the counting frequency is 8MHz / (prescaler value + 1). Finally, the count value should be set according to this frequency in order to achieve one full count within one second. Finally, the LED blinks once per second through the delay cycle to achieve precise control of the timer.
 
 #### 4b.
 Summary: 
