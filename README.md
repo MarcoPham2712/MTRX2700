@@ -102,6 +102,20 @@ Part B: Shirui
 Part C: Shirui
 ```
 
+#### 4a.
+Summary: 
+
+
+#### 4b.
+Summary: 
+
+
+
+#### 4c.
+Summary: 
+
+
+
 ### Exercise 5 Integration
 ```
 Board 1: Ben
