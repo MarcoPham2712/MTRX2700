@@ -5,31 +5,28 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 S_SRCS += \
-../Src/cipher_1c.s \
 ../Src/definitions.s \
+../Src/delay_4a.s \
+../Src/delay_period_demo_4b.s \
+../Src/hardware_delay_4c.s \
 ../Src/initialise.s \
-../Src/main.s \
-../Src/palindrome_1b.s \
-../Src/receive_3b_johnathan.s \
-../Src/vowels_2d.s 
+../Src/main.s 
 
 OBJS += \
-./Src/cipher_1c.o \
 ./Src/definitions.o \
+./Src/delay_4a.o \
+./Src/delay_period_demo_4b.o \
+./Src/hardware_delay_4c.o \
 ./Src/initialise.o \
-./Src/main.o \
-./Src/palindrome_1b.o \
-./Src/receive_3b_johnathan.o \
-./Src/vowels_2d.o 
+./Src/main.o 
 
 S_DEPS += \
-./Src/cipher_1c.d \
 ./Src/definitions.d \
+./Src/delay_4a.d \
+./Src/delay_period_demo_4b.d \
+./Src/hardware_delay_4c.d \
 ./Src/initialise.d \
-./Src/main.d \
-./Src/palindrome_1b.d \
-./Src/receive_3b_johnathan.d \
-./Src/vowels_2d.d 
+./Src/main.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -39,7 +36,7 @@ Src/%.o: ../Src/%.s Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/cipher_1c.d ./Src/cipher_1c.o ./Src/definitions.d ./Src/definitions.o ./Src/initialise.d ./Src/initialise.o ./Src/main.d ./Src/main.o ./Src/palindrome_1b.d ./Src/palindrome_1b.o ./Src/receive_3b_johnathan.d ./Src/receive_3b_johnathan.o ./Src/vowels_2d.d ./Src/vowels_2d.o
+	-$(RM) ./Src/definitions.d ./Src/definitions.o ./Src/delay_4a.d ./Src/delay_4a.o ./Src/delay_period_demo_4b.d ./Src/delay_period_demo_4b.o ./Src/hardware_delay_4c.d ./Src/hardware_delay_4c.o ./Src/initialise.d ./Src/initialise.o ./Src/main.d ./Src/main.o
 
 .PHONY: clean-Src
 

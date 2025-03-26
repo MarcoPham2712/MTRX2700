@@ -1,12 +1,10 @@
 .syntax unified
 .thumb
-#include "initialise.s"
-.global main
-.data
-@Define variables
+#include "definitions.s"
+
 .text
 
-main:
+delay_4a:
 @ The initialization Settings enable and initialize some of the functions on the STM32 board
     BL enable_timer2_clock        	@ Initializes and enables the TIM2
     BL enable_peripheral_clocks   	@ Initializes and peripheral clocks
@@ -25,6 +23,7 @@ main:
 
 @ Setting the trigger_prescaler function
 	BL trigger_prescaler
+
 
 @ The main loop logic of the delay equation operates as follows: first, the system
 @ sets the delay parameters, then executes the delay. When the system detects the
@@ -49,6 +48,7 @@ Delay_Function:
     CMP R3, R1                    	@ Compare the delay value
     BCC Delay_Function            	@ When the current value < Delay value,return to Delay_Function and wait
     BX LR
+
 
 @Set the LEDon function
 LED_on:

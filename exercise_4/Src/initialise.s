@@ -26,9 +26,28 @@ initialise_discovery_board:
 	STRH R1, [R0, #MODER + 2]    @ Store the new register values in the top half word representing
 								 @ The MODER settings for pe8-15
 	BX LR                        @ Return from function call
-
-
 trigger_prescaler:
+@ Use (TIMx_EGR) instead (to reset the clock)
+@ This is a hack to get the prescaler to take affect
+@ the prescaler is not changed until the counter overflows
+@ the TIMx_ARR register sets the count at which the overflow
+@ happens. Here, the reset is triggered and the overflow
+@ occurs to make the prescaler take effect.
+@ you should use a different approach to this !
+@ In your code, you should be using the ARR register to
+@ set the maximum count for the timer
+@ store a value for the prescaler
+	LDR R0, =TIM2	             @ Load the base address for the timer
+	LDR R1, =0x1                 @ Make the timer overflow after counting to only 1
+	STR R1, [R0, TIM_ARR]        @ Set the ARR register
+	LDR R8, =0x00
+	STR R8, [R0, TIM_CNT]        @ Reset the clock
+	NOP
+	NOP
+	LDR R1, =0xffffffff          @ Set the ARR back to the default value
+	STR R1, [R0, TIM_ARR]        @ Set the ARR register
+	BX LR
+trigger_prescaler_partc:
 @ Use (TIMx_EGR) instead (to reset the clock)
 @ This is a hack to get the prescaler to take affect
 @ the prescaler is not changed until the counter overflows
@@ -56,6 +75,5 @@ enable_arpe:
     ORR R1, R1, #(1 << 7 | 1 << 0)  @ bit7: ARPE, bit0: CEN
     STR R1, [R0, #TIM_CR1]
     BX LR
-
 
 

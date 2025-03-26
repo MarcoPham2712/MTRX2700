@@ -8,4 +8,5 @@
     Finish integration
 
 __Summary__
-
+Discussion of UART, cleaning up folder and preparing git repository for
+marking.

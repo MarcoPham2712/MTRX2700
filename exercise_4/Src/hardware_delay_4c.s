@@ -1,12 +1,10 @@
 .syntax unified
 .thumb
-#include "initialise.s"
-.global main
-.data
-@ Define variables
+#include "definitions.s"
+
 .text
 
-main:
+delay_4c:
 @ The initialization Settings enable and initialize some of the functions on the STM32 board
     BL enable_timer2_clock        	@ Initializes and enables the TIM2
     BL enable_peripheral_clocks   	@ Initializes and peripheral clocks
@@ -18,17 +16,17 @@ main:
 	STR R1, [R0, TIM_PSC]         	@ Set the prescaler register
 
 @ Setting the trigger_prescaler function
-	BL trigger_prescaler
+	BL trigger_prescaler_partc
 
 @ Main logic function
     BL enable_arpe
     BL delayfunction
-    BL LED_on
+    BL LED_on_c
     BL delayfunction
-    BL LED_off
+    BL LED_off_c
 
 @ Set the LEDon function
-LED_on:
+LED_on_c:
     LDR R4, =0b11111111           	@ Load bitmask value into R4 and turn on all LEDs
     LDR R0, =GPIOE                	@ Load the address of the GPIOE register into R0
     STR R4, [R0, #ODR + 1]        	@ Store this to the second byte of the ODR (bits 8-15)
@@ -36,7 +34,7 @@ LED_on:
 	B LED_off
 
 @ Set the LEDoff function
-LED_off:
+LED_off_c:
     LDR R4, =0b00000000           	@ Load bitmask value into R4 and turn off all LEDs
     LDR R0, =GPIOE                	@ Load the address of the GPIOE register into R0
     STR R4, [R0, #ODR + 1]        	@ Store this to the second byte of the ODR (bits 8-15)

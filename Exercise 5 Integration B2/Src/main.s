@@ -18,20 +18,33 @@ decipher_buffer: .space 32
 
 serial_buffer: .space 300
 serial_buffer_size: .word 300
-terminator: .byte '*'
 
 .text
-// Utility function
+// Utility functions
 set_led_state:
 	// Replace GPIOE ODR with R3 bitmask
 	LDR R1, =GPIOE
 	STRB R3, [R1, #ODR + 1]
 	BX LR
 
+delayfunction:
+    LDR R0, =TIM2                 	@ Loads the base address of the Timer2 to R0
+wait_loop:
+    LDR R1, [R0, #TIM_SR]         	@ Load the Timer 2 Status Register (TIM_SR) into R1
+    TST R1, #1                    	@ Test if the Update Interrupt Flag (UIF) is set
+    BEQ wait_loop                 	@ Continue to wait
+    MOV R2, #0                    	@ Clear the value of the UIF flag
+    STR R2, [R0, #TIM_SR]
+    BX LR
+
 main:
     // Initialise GPIO registers
 	BL enable_peripheral_clocks // Branch with link to set the clocks for the I/O and UART
 	BL Set_LED_to_output        // Once the clocks are started, need to initialise the discovery board I/O
+	BL enable_timer2_clock
+	BL timer_enable_peripheral_clocks
+	BL trigger_prescaler_partc
+	BL enable_arpe
 	// TODO add support for serial via pins
 	// TODO add timer initialisation
 
@@ -40,6 +53,7 @@ main:
 program_loop:
 	// Poll until a message is received
 	// Setup and call the receive_string function
+	/*
 	grab_string:
 		LDR  R0, =serial_buffer
 		LDR  R1, =serial_buffer_size
@@ -54,10 +68,12 @@ program_loop:
 		LDR  R1, =incoming_buffer
 		MOV  R2, #0
 		STRB R2, [R1, R0]
+	*/
+
 
 	// Check if message is a palindrome
 	check_palindrome:
-		LDR R1, =serial_buffer
+		LDR R1, =test_string ///////////////////
 		BL palindrome
 
 		// Decipher palindrome messages (R0 is 1 if palindrome, otherwise 0)
@@ -69,7 +85,7 @@ program_loop:
 		// Setup and run cipher
 		LDR R0, =decipher_key
 		LDR R0, [R0]
-		LDR R1, =serial_buffer
+		LDR R1, =test_string
 		PUSH {R0, R1}
 		BL caesar_cipher
 
@@ -88,13 +104,13 @@ program_loop:
 		BL set_led_state
 
 		// Delay
-		// TODO
+		BL delayfunction
 
 		// Show consonants
 		MOV R3, R7
 		BL set_led_state
 
 		// Delay
-		// TODO
+		BL delayfunction
 
 		B display_loop

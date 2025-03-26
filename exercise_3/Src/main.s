@@ -18,4 +18,7 @@
 
 @ this is the entry function called from the c file
 main:
-	B receive_main
+	// Test 3d
+
+
+	// Test 3e
