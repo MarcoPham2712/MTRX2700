@@ -87,11 +87,11 @@ Provide multiple strings with random uppercases (shows case-insensitive) and non
 
 ### Exercise 3 Serial Communication
 ```
-Part A: Marco
+Part A: Marco, Shirui
 Part B: Marco, Shirui, Johnathan
-Part C: Shirui
+Part C: Marco，Shirui
 Part D: Marco, Shirui
-Part E: Marco
+Part E: Marco, Shirui
 ```
 We create functions to perform serial communication via UART. These include transmit, receive and echo functions which we use to create a communication interface between two boards.
 
