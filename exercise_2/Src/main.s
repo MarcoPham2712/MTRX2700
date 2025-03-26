@@ -22,7 +22,7 @@ main:
 	BL Set_LED_state
 
     // Test 2b (infinite loop)
-    B entry_2b
+    //B entry_2b
 
     // Test 2c (infinite loop)
     B start_user_led_ripple
