@@ -1,6 +1,7 @@
 .syntax unified
 .thumb
-#include "initialise.s"
+#include "definitions.s"
+
 .text
 
 delay_4b:
@@ -30,39 +31,41 @@ delay_4b:
 @ sets the delay parameters, then executes the delay. When the system detects the
 @ specified delay time, it triggers the LED control. The LED's blinking frequency
 @ serves as an indicator of whether the delay function is working correctly.
-Delay_Loop_Function:
-    BL Delay_Parameter_Setting_function
-    BL LED_on
-    BL Delay_Parameter_Setting_function
-    BL LED_off
+Delay_Loop_Function_b:
+    BL Delay_Parameter_Setting_function_b
+    BL LED_on_b
+    BL Delay_Parameter_Setting_function_b
+    BL LED_off_b
 
 @ Set delay function
-Delay_Parameter_Setting_function:
+Delay_Parameter_Setting_function_b:
     LDR R1, =10000              	@ Load delay value into R1,Set the delay time to 1s
     LDR R0, =TIM2
     MOV R2, #0
     STR R2, [R0,TIM_CNT]          	@ Reset TIM2 counter to 0
 
 @ Loop comparison checks the delay time.
-Delay_Function:
+Delay_Function_b:
     LDR R3, [R0,TIM_CNT]          	@ Load current value of TIM2 counter into R3
     CMP R3, R1                    	@ Compare the delay value
-    BCC Delay_Function            	@ When the current value < Delay value,return to Delay_Function and wait
+    BCC Delay_Function_b            	@ When the current value < Delay value,return to Delay_Function and wait
     BX LR
 
+
+
 @Set the LEDon function
-LED_on:
+LED_on_b:
     LDR R4, =0xFF           	  	@ Turn on all LEDs
     LDR R0, =GPIOE
     STR R4, [R0,#ODR + 1]
-    BL Delay_Parameter_Setting_function
-	B LED_off                     	@ Jump to the LED_off function
+    BL Delay_Parameter_Setting_function_b
+	B LED_off_b                     	@ Jump to the LED_off function
 
 @Set the LEDoff function
-LED_off:
+LED_off_b:
     MOV R4, #0          		  	@ Turn off all LEDs
     LDR R0, =GPIOE
     STR R4, [R0,#ODR + 1]
-    BL Delay_Parameter_Setting_function
-	B LED_on                      	@ Jump to the LED_on function
+    BL Delay_Parameter_Setting_function_b
+	B LED_on_b                      	@ Jump to the LED_on function
 

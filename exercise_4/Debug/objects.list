@@ -3,4 +3,5 @@
 "./Src/delay_period_demo_4b.o"
 "./Src/hardware_delay_4c.o"
 "./Src/initialise.o"
+"./Src/main.o"
 "./Startup/startup_stm32f303vctx.o"

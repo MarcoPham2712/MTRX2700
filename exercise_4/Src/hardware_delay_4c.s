@@ -1,6 +1,7 @@
 .syntax unified
 .thumb
-#include "initialise.s"
+#include "definitions.s"
+
 .text
 
 delay_4c:
@@ -20,12 +21,12 @@ delay_4c:
 @ Main logic function
     BL enable_arpe
     BL delayfunction
-    BL LED_on
+    BL LED_on_c
     BL delayfunction
-    BL LED_off
+    BL LED_off_c
 
 @ Set the LEDon function
-LED_on:
+LED_on_c:
     LDR R4, =0b11111111           	@ Load bitmask value into R4 and turn on all LEDs
     LDR R0, =GPIOE                	@ Load the address of the GPIOE register into R0
     STR R4, [R0, #ODR + 1]        	@ Store this to the second byte of the ODR (bits 8-15)
@@ -33,7 +34,7 @@ LED_on:
 	B LED_off
 
 @ Set the LEDoff function
-LED_off:
+LED_off_c:
     LDR R4, =0b00000000           	@ Load bitmask value into R4 and turn off all LEDs
     LDR R0, =GPIOE                	@ Load the address of the GPIOE register into R0
     STR R4, [R0, #ODR + 1]        	@ Store this to the second byte of the ODR (bits 8-15)

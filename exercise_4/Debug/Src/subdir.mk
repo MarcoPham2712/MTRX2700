@@ -9,21 +9,24 @@ S_SRCS += \
 ../Src/delay_4a.s \
 ../Src/delay_period_demo_4b.s \
 ../Src/hardware_delay_4c.s \
-../Src/initialise.s 
+../Src/initialise.s \
+../Src/main.s 
 
 OBJS += \
 ./Src/definitions.o \
 ./Src/delay_4a.o \
 ./Src/delay_period_demo_4b.o \
 ./Src/hardware_delay_4c.o \
-./Src/initialise.o 
+./Src/initialise.o \
+./Src/main.o 
 
 S_DEPS += \
 ./Src/definitions.d \
 ./Src/delay_4a.d \
 ./Src/delay_period_demo_4b.d \
 ./Src/hardware_delay_4c.d \
-./Src/initialise.d 
+./Src/initialise.d \
+./Src/main.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -33,7 +36,7 @@ Src/%.o: ../Src/%.s Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/definitions.d ./Src/definitions.o ./Src/delay_4a.d ./Src/delay_4a.o ./Src/delay_period_demo_4b.d ./Src/delay_period_demo_4b.o ./Src/hardware_delay_4c.d ./Src/hardware_delay_4c.o ./Src/initialise.d ./Src/initialise.o
+	-$(RM) ./Src/definitions.d ./Src/definitions.o ./Src/delay_4a.d ./Src/delay_4a.o ./Src/delay_period_demo_4b.d ./Src/delay_period_demo_4b.o ./Src/hardware_delay_4c.d ./Src/hardware_delay_4c.o ./Src/initialise.d ./Src/initialise.o ./Src/main.d ./Src/main.o
 
 .PHONY: clean-Src
 

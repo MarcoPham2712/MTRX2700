@@ -1,6 +1,7 @@
 .syntax unified
 .thumb
-#include "initialise.s"
+#include "definitions.s"
+
 .text
 
 delay_4a:
@@ -22,6 +23,7 @@ delay_4a:
 
 @ Setting the trigger_prescaler function
 	BL trigger_prescaler
+
 
 @ The main loop logic of the delay equation operates as follows: first, the system
 @ sets the delay parameters, then executes the delay. When the system detects the
@@ -46,6 +48,7 @@ Delay_Function:
     CMP R3, R1                    	@ Compare the delay value
     BCC Delay_Function            	@ When the current value < Delay value,return to Delay_Function and wait
     BX LR
+
 
 @Set the LEDon function
 LED_on:
