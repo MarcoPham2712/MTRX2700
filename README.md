@@ -108,7 +108,7 @@ In task 4a, the program is required to initialise the TIM2 timer and GPIO clock,
 
 #### 4b.
 Summary: 
-
+The program under discussion is based on the STM32 microcontroller, which has a system clock frequency of 8MHz. The actual counting frequency of the timer is reduced by configuring the prescaler of the timer. In order to achieve 10,000 counts in 1 second by counting every 0.1 milliseconds, the prescaler should be set to 799, which reduces the counting frequency to 10,000 Hz (i.e., one count every 0.1ms). The delay effect of one second is achieved by setting the comparison value of the timer and polling to check the status of the timer, thus finally determining whether 10,000 counts have been reached.
 
 
 #### 4c.
