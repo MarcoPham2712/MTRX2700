@@ -6,9 +6,8 @@
 .data
 .align
 
-incoming_buffer: .space 256
-incoming_counter: .byte 255
-
+example_incoming_buffer: .space 256
+example_incoming_counter: .byte 255
 
 .text
 receive_main:
@@ -21,9 +20,8 @@ receive_main:
 
 	// Setup and call the receive string function
 	LDR R0, =UART4
-	LDR R0, [R0]
-	LDR R1, =incoming_buffer
-	LDR R2, =incoming_counter
+	LDR R1, =example_incoming_buffer
+	LDR R2, =example_incoming_counter
 	LDRB R2, [R2]
 	LDR R3, =terminator
 	LDRB R3, [R3]
@@ -31,7 +29,7 @@ receive_main:
 	BL receive_string
 
 	// Append a NULL terminator to the end of the used buffer space
-	LDR R1, =incoming_buffer
+	LDR R1, =example_incoming_buffer
 	MOV R2, #0
 	STRB R2, [R1, R0]
 
@@ -57,7 +55,7 @@ receive_string:
 	MOV R3, #0
 
 	receive_until_terminator:
-		// Check USART Interrupt and Status Register for overrun and frame
+		// Check USART Interrupt and Status Register for Overrun and Frame
 		// errors and check if RX buffer has changed (Not Equal)
 		LDR R1, [R0, USART_ISR]
 		TST R1, 1 << USART_ISR_ORE_BIT | 1 << USART_ISR_FE_BIT

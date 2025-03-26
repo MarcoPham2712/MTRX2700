@@ -1,44 +1,50 @@
 .syntax unified
 .thumb
 
-#include "initialise.s"
-
-.data
-.align
-incoming_buffer: .space 62
-incoming_counter: .byte 62
-
-tx_string: .asciz "TEST\r\n"
-terminator: .asciz "*"
+#include "definitions.s"
 
 .text
-transmit_main:
-	BL enable_power
-	BL enable_peripheral_clocks
-	BL enable_usart1_uart4_clocks
-	BL use_uart4_pin_config
-	BL configure_uart4
-	BL finalise_uart4_config
-    
-button_check_loop:
-    LDR R0,=GPIOA
-    LDR R1,[R0,#IDR]
-    TST R1,#1
-    BEQ button_check_loop
-
 // Takes in 4 arguments from the stack (in order):
 //   UART base address
 //   Buffer pointer
 //	 Buffer length
 //   Terminating character
+// Repeatedly sends characters through the transmit buffer
+// R0: UART to use
+// R1: USART Interrupt and Status Register
+// R2: Transmitted byte
+// R3: Buffer index
+// R4 to R6: Arguments
 transmit_string:
     POP {R0, R4, R5, R6}
     MOV R3, #0
+	LDR R1, [R0, USART_ISR]
 
-    LDR R0,=UART               @ The base address for the register to set up UART
-    LDR R3,=tx_string          @ Load the memory addresses of the buffer and terminating character information
-    LDR R4,=terminator
+	transmit_until_length:
+		// Only transmit when Transmit Buffer Empty (TxE)
+		ANDS R1, 1 << USART_ISR_TXE_BIT
+		BEQ transmit_until_length
 
+		// Transmit next character
+		LDRB R2, [R4], #1
+		STRB R2, [R0, USART_TDR]
+
+		// Increment index and repeat until length
+		ADD R3, #1
+		CMP R3, R5
+		BGE transmit_until_length
+
+	transmit_terminator:
+		// Only transmit when Transmit Buffer Empty (TxE)
+		ANDS R1, 1 << USART_ISR_TXE_BIT
+		BEQ transmit_terminator
+
+		// Transmit terminator
+		STRB R6, [R0, USART_TDR]
+	
+	BX LR
+
+/*
 tx_loop:
 	@ the base address for the register to set up UART
 	LDR R0, =UART
@@ -48,7 +54,6 @@ tx_loop:
 	@ dereference the length variable
 	@ notice how memory address R4 is replaced by the value that was at that memory address
 	LDR R4, [R4]
-
 
 tx_uart:
 	LDR R1, [R0, USART_ISR] @ load the status of the UART
@@ -93,3 +98,4 @@ tx_uart_terminator:
     STRB R5, [R0, USART_TDR]
     BL delay_loop
     B button_check_loop
+*/
