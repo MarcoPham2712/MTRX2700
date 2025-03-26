@@ -101,7 +101,7 @@ Part A: Shirui
 Part B: Shirui
 Part C: Shirui
 ```
-
+In this task, the Hardware Timers of the STM32 microcontroller must be used for the precise implementation of the delay and timing functions. The delay function is achieved by configuring the relevant register parameters of timer. These precise delays enable the control of hardware cycles, such as the lighting of LEDs, timed transmissions, etc.
 #### 4a.
 Summary: 
 
