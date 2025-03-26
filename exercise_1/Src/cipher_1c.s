@@ -1,6 +1,3 @@
-// ACKNOWLEDGEMENT OF USE OF AI
-// The modulus operations used in this file were written with the assistance of AI
-
 .syntax unified
 .thumb
 
