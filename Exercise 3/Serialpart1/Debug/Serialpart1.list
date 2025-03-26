@@ -10,9 +10,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
   2 .rodata       00000000  080003ac  080003ac  0000204c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   3 .ARM.extab    00000000  080003ac  080003ac  0000204c  2**0
-                  CONTENTS, READONLY
+                  CONTENTS
   4 .ARM          00000000  080003ac  080003ac  0000204c  2**0
-                  CONTENTS, READONLY
+                  CONTENTS
   5 .preinit_array 00000000  080003ac  080003ac  0000204c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   6 .init_array   00000004  080003ac  080003ac  000013ac  2**2
@@ -31,19 +31,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  13 .debug_line   00000146  00000000  00000000  0000207c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_line_str 00000081  00000000  00000000  000021c2  2**0
+ 14 .debug_line_str 0000008d  00000000  00000000  000021c2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_info   00000055  00000000  00000000  00002243  2**0
+ 15 .debug_info   00000055  00000000  00000000  0000224f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_abbrev 00000038  00000000  00000000  00002298  2**0
+ 16 .debug_abbrev 00000038  00000000  00000000  000022a4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_aranges 00000048  00000000  00000000  000022d0  2**3
+ 17 .debug_aranges 00000048  00000000  00000000  000022e0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00000092  00000000  00000000  00002318  2**0
+ 18 .debug_str    0000009e  00000000  00000000  00002328  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_rnglists 00000019  00000000  00000000  000023aa  2**0
+ 19 .debug_rnglists 00000019  00000000  00000000  000023c6  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  0000002c  00000000  00000000  000023c4  2**2
+ 20 .debug_frame  0000002c  00000000  00000000  000023e0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -293,9 +293,9 @@ main:
 
 
 program_loop:
-	BL button_check_loop   		   @ Check if button is pressed and send message
+	BL button_check_loop   		   	@ Check if button is pressed and send message
  8000284:	f000 f801 	bl	800028a <button_check_loop>
-    B program_loop                 @ Repeat forever
+    B program_loop                 	@ Repeat forever
  8000288:	e7fc      	b.n	8000284 <program_loop>
 
 0800028a <button_check_loop>:
@@ -303,15 +303,12 @@ program_loop:
 button_check_loop:
 	LDR R0, =GPIOA                  @ Load GPIOA base address
  800028a:	f04f 4090 	mov.w	r0, #1207959552	@ 0x48000000
-    LDR R1, [R0, IDR]        @ Load GPIO mode register
+    LDR R1, [R0, IDR]        		@ Load GPIO mode register
  800028e:	6901      	ldr	r1, [r0, #16]
-    TST R1, #1        			@ Check if PA0 (User Button) is pressed
+    TST R1, #1        				@ Check if PA0 (User Button) is pressed
  8000290:	f011 0f01 	tst.w	r1, #1
     BEQ button_check_loop           @ If not pressed, keep checking
  8000294:	d0f9      	beq.n	800028a <button_check_loop>
-    @LDR R2, =GPIOE                    @ Load GPIOE base address
-    @LDRB R3, =0b10101010				@LED pattern
-    @STRB R3, [R2, #ODR + 1]             @ Load output data register
 
 
     LDR R1, =tx_string              @ Load address of the message string
@@ -338,7 +335,7 @@ uart_transmit_string:
 transmit_loop:						@tx_loop
     LDRB R2, [R1], #1               @ Load a byte from the string and increment pointer
  80002a4:	f811 2b01 	ldrb.w	r2, [r1], #1
-    CMP R2, R7                   @ Check if null terminator reached
+    CMP R2, R7                   	@ Check if null terminator reached
  80002a8:	42ba      	cmp	r2, r7
     BEQ transmit_done               @ If null, end transmission
  80002aa:	d002      	beq.n	80002b2 <transmit_done>
@@ -351,7 +348,7 @@ transmit_loop:						@tx_loop
 080002b2 <transmit_done>:
 
 transmit_done:
-    B program_loop           @ Send the terminating character
+    B program_loop           		@ Send the terminating character
  80002b2:	e7e7      	b.n	8000284 <program_loop>
 
     POP {LR}                        @ Restore return address
@@ -370,21 +367,21 @@ uart_transmit_char:					@tx_uart
 wait_for_tx_ready:
     LDR R3, =UART                   @ Load UART base address
  80002bc:	4b0a      	ldr	r3, [pc, #40]	@ (80002e8 <delay_inner+0x10>)
-    LDR R4, [R3, USART_ISR]          @ Load UART status register
+    LDR R4, [R3, USART_ISR]         @ Load UART status register
  80002be:	69dc      	ldr	r4, [r3, #28]
-    TST R4, 1 << UART_TXE            @ Check if Transmit buffer is empty
+    TST R4, 1 << UART_TXE           @ Check if Transmit buffer is empty
  80002c0:	f014 0f80 	tst.w	r4, #128	@ 0x80
     BL delay_loop
  80002c4:	f000 f806 	bl	80002d4 <delay_loop>
-    BEQ wait_for_tx_ready            @ Wait if buffer is full
+    BEQ wait_for_tx_ready           @ Wait if buffer is full
  80002c8:	d0f8      	beq.n	80002bc <wait_for_tx_ready>
 
-    STRB R2, [R3, USART_TDR]         @ Store character in Transmit Data Register
+    STRB R2, [R3, USART_TDR]        @ Store character in Transmit Data Register
  80002ca:	f883 2028 	strb.w	r2, [r3, #40]	@ 0x28
 
-    POP {LR}                         @ Restore return address
+    POP {LR}                        @ Restore return address
  80002ce:	f85d eb04 	ldr.w	lr, [sp], #4
-    BX LR                            @ Return
+    BX LR                           @ Return
  80002d2:	4770      	bx	lr
 
 080002d4 <delay_loop>:

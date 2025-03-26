@@ -1,12 +1,9 @@
 .syntax unified
 .thumb
 #include "initialise.s"
-.global main
-.data
-@ Define variables
 .text
 
-main:
+delay_4b:
 @ The initialization Settings enable and initialize some of the functions on the STM32 board
     BL enable_timer2_clock        	@ Initializes and enables the TIM2
     BL enable_peripheral_clocks   	@ Initializes and peripheral clocks
