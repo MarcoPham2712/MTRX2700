@@ -12,10 +12,11 @@ incoming_counter: .byte 255
 terminator: .byte '*'
 
 .text
+// Example on how to use the receive string function
 receive_main:
 	BL initialise_power				@ Power on the STM32 board
 	BL enable_peripheral_clocks		@ Initializes and peripheral clocks
-	BL initialise_discovery_board	@ Initialize the board
+	BL Set_LED_to_output			@ Initialize the board
 	BL enable_uart					@ Initialize the UART
 
 	// Setup and call the receive string function
@@ -31,8 +32,6 @@ receive_main:
 	LDR R1, =incoming_buffer
 	MOV R2, #0
 	STRB R2, [R1, R0]
-
-	B tx_loop
 
 // Takes in 3 arguments from the stack (in order):
 //   Buffer pointer

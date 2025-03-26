@@ -55,15 +55,10 @@ loop_forever:
     LDR R4,=terminator
 	LDRB R5,[R4]
 	CMP R3,R5              			@ Check whether it is the terminator
-    BEQ found_terminator     	@ load the lowest byte (RDR bits [0:7] for an 8 bit read)
+    BEQ found_terminator     	    @ If terminator don't store to the end and continue to palindrome
     STRB R3,[R6,R8]             	@ Store in the buffer
     ADD R8,#1
-/*
-	LDR R4,=terminator
-	LDRB R5,[R4]
-	CMP R3,R5              			@ Check whether it is the terminator
-    BEQ found_terminator
-*/
+
     CMP R7,R8                    	@ Check whether the buffer is exceeded
     BGT no_reset
     MOV R8,#0
@@ -86,51 +81,6 @@ found_terminator:
     MOV R9,R8
     PUSH {R6}
     B palindrome
-    B tx_loop
-
-@ The transfer function is used to transfer previously saved data
-tx_loop:
-    LDR R0,=UART
-    LDR R3,=incoming_buffer
-    MOV R4,R9
-
-tx_uart:
-    LDR R1,[R0, USART_ISR]
-    TST R1,1 << UART_TXE
-    BEQ tx_uart
-
-    LDRB R5,[R3], #1
-    STRB R5,[R0, USART_TDR]
-    SUBS R4,#1
-    BGT tx_uart
-    LDR R3,=success_msg
-
-@ Transfer message Success
-tx_success_loop:
-    LDRB R5,[R3],#1
-    CMP R5,#0
-    BEQ restart_loop
-
-tx_uart_success:
-    LDR R1,[R0, USART_ISR]
-    TST R1,1 << UART_TXE
-    BEQ tx_uart_success
-
-    STRB R5,[R0, USART_TDR]
-    B tx_success_loop
-
-@Empty the counter and wait to return to the next accept and transfer
-restart_loop:
-    MOV R8, #0
-    B loop_forever
-
-delay_loop:
-    LDR R9, =0xfffff
-delay_inner:
-    SUBS R9, #1
-    BGT delay_inner
-    BX LR
-
 
 /*
  * Checks if the string in register R1 is a palindrome
@@ -191,11 +141,11 @@ palindrome:
 
 	palindrome_fail:
 		MOV R2, R1
+		// When palindrome fails add the asterisk back onto the original string for transmition
 		palindrome_fail_loop:
 			LDRB R3, [R2], #1
 			CMP R3, 0x00
 			BEQ asterisk
-			B palindrome_fail_loop
 
 		asterisk:
 			SUB R2, #1

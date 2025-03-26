@@ -2,7 +2,6 @@
 .thumb
 
 #include "definitions.s"
-#include "initialise.s"
 
 .text
 entry_2b:

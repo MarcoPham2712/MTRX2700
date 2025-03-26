@@ -3,5 +3,6 @@
 "./Src/initialise.o"
 "./Src/main.o"
 "./Src/palindrome_1b.o"
+"./Src/receive_3b_johnathan.o"
 "./Src/vowels_2d.o"
 "./Startup/startup_stm32f303vctx.o"

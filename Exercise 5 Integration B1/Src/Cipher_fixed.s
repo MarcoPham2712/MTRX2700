@@ -61,7 +61,7 @@ caesar_cipher:
 		ADD R2, R3
 		STRB R2, [R1]
 		B cipher_next
-
+	//add the asterisk back to the end of the string for transmition
 	add_asterisk:
         MOV R2, #'*'          
         STRB R2, [R1], #1     //Store '*' and increment R1

@@ -2,7 +2,6 @@
 .thumb
 
 #include "definitions.s"
-#include "initialise.s"
 
 .data // Variables
 initial_led_state: .byte 0b00000000

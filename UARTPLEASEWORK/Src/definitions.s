@@ -1,4 +1,9 @@
+@ Initialize the value that can checking button pressed
+.equ button, 0x01
 
+.equ IDR, 0x10	@ GPIO input register
+.equ MODER, 0x00	@ register for setting the port mode (in/out/etc)
+.equ ODR, 0x14
 @ base register for resetting and clock settings
 .equ RCC, 0x40021000
 .equ AHBENR, 0x14	@ register for enabling clocks
@@ -12,14 +17,17 @@
 
 @ specific base address for the desired UART to use
 @  find this in the peripheral register memory boundary in the big manual
-.equ UART, 0x40013800
+.equ USART1, 0x40013800
+.equ UART4, 0x40004C00 @USART2_TX is on pin 'PA10', AF5
+
 
 @ specific bit to enable this UART
-.equ UART_EN, 14
+.equ USART1_EN, 14 @on APB2
+.equ UART4_EN, 19 @on APB1
 
 @ register addresses and offsets for general UARTs
-.equ USART_CR1, 0x00 @Control register 1 for UART
-.equ USART_BRR, 0x0C @Baud rate register
+.equ USART_CR1, 0x00
+.equ USART_BRR, 0x0C
 .equ USART_ISR, 0x1C @ UART status register offset
 .equ USART_ICR, 0x20 @ UART clear flags for errors
 
@@ -47,9 +55,6 @@
 .equ GPIOE_ENABLE, 21	@ enable bit for GPIOE
 
 
-.equ MODER, 0x00	@ register for setting the port mode (in/out/etc)
-.equ ODR, 0x14	@ GPIO output register
-.equ IDR, 0x10	@ GPIO input register
 .equ GPIO_MODER, 0x00	@ set the mode for the GPIO
 .equ GPIO_OSPEEDR, 0x08	@ set the speed for the GPIO
 
@@ -74,4 +79,3 @@
 
 .equ PWREN, 28
 .equ SYSCFGEN, 0
-
