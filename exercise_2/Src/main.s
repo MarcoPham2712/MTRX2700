@@ -11,6 +11,7 @@
 
 .data
 test_string: .asciz "abcde.fghi44jkl,mnopq1"
+//4 vowels 13 consonants
 
 .text
 main:
@@ -25,7 +26,7 @@ main:
     //B entry_2b
 
     // Test 2c (infinite loop)
-    B start_user_led_ripple
+    //B start_user_led_ripple
 
     // Test 2d (infinite loop)
     LDR R0, =test_string
