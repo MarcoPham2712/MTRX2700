@@ -12,6 +12,8 @@
 .data
 test_string: .asciz "abcde.fghi44jkl,mnopq1"
 //4 vowels 13 consonants
+//test_string: .asciz "abbba"
+
 
 .text
 main:
