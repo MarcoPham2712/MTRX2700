@@ -36,30 +36,12 @@ Add_letter:
 
 	continue:
     	LDR R0, =test_string // Reload the string from the start
-    	B vowel_lowercase
-
-    vowel_lowercase:
-        LDRB R4, [R0], #1    // After loading byte pointer is incremented by 1
-        CMP R4, #0           // Check if reached the end of the string
-        BEQ end_lowercase
-       // If less than 'A', it's not an uppercase letter
-        CMP R4, #'A'
-        BLT vowel_lowercase
-        // If greater than 'Z', it's not an uppercase letter
-        CMP R4, #'Z'
-        BGT vowel_lowercase
-        ADD R4, #32		// Convert to lowercase by adding 32 (as shown in the ASCII table this converts to lowercase)
-        SUB R0, #1
-        STRB R4, [R0]   // Store the modified character at the point it was found
-        B vowel_lowercase
-
-	end_lowercase:
-		LDR R0, =test_string //Reload the string from the start
-    	B count_vowels
-
     count_vowels:
     	LDRB R2, [R0], #1	// After loading byte pointer is incremented by 1
     	//Check if the loaded byte is equal to a vowel, if so add 1 to R3 (vowel counter)
+    	//Loop until end of the string (null terminator)
+    	CMP R2, #0
+    	BEQ end
     	CMP R2, 'e'
     	BEQ add_vowel
     	CMP R2, 'i'
@@ -70,9 +52,16 @@ Add_letter:
     	BEQ add_vowel
     	CMP R2, 'a'
     	BEQ add_vowel
-    	//Loop until end of the string (null terminator)
-    	CMP R2, #0
-    	BEQ end
+    	CMP R2, 'E'
+    	BEQ add_vowel
+    	CMP R2, 'I'
+    	BEQ add_vowel
+    	CMP R2, 'O'
+    	BEQ add_vowel
+    	CMP R2, 'U'
+    	BEQ add_vowel
+    	CMP R2, 'A'
+    	BEQ add_vowel
     	B count_vowels
 
     add_vowel:
