@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (12.3.rel1)
+# Toolchain: GNU Tools for STM32 (13.3.rel1)
 ################################################################################
 
 -include ../makefile.init
@@ -33,34 +33,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := UARTPLEASEWORK
+BUILD_ARTIFACT_NAME := uarttransmit
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-UARTPLEASEWORK.elf \
+uarttransmit.elf \
 
 MAP_FILES += \
-UARTPLEASEWORK.map \
+uarttransmit.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-UARTPLEASEWORK.list \
+uarttransmit.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: UARTPLEASEWORK.elf secondary-outputs
+main-build: uarttransmit.elf secondary-outputs
 
 # Tool invocations
-UARTPLEASEWORK.elf UARTPLEASEWORK.map: $(OBJS) $(USER_OBJS) /home/appl3s/Documents/mtrx/mtrx2700/MTRX2700/UARTPLEASEWORK/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "UARTPLEASEWORK.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/appl3s/Documents/mtrx/mtrx2700/MTRX2700/UARTPLEASEWORK/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="UARTPLEASEWORK.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+uarttransmit.elf uarttransmit.map: $(OBJS) $(USER_OBJS) C:\Users\Hello\STM32CubeIDE\workspace_1.18.0\uarttransmit\STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "uarttransmit.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Hello\STM32CubeIDE\workspace_1.18.0\uarttransmit\STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="uarttransmit.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -69,14 +69,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-UARTPLEASEWORK.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "UARTPLEASEWORK.list"
+uarttransmit.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "uarttransmit.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) UARTPLEASEWORK.elf UARTPLEASEWORK.list UARTPLEASEWORK.map default.size.stdout
+	-$(RM) default.size.stdout uarttransmit.elf uarttransmit.list uarttransmit.map
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

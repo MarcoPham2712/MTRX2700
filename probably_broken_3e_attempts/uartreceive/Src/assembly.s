@@ -7,7 +7,7 @@
 
 .data
 @ define variables
-
+terminator: .asciz "#"
 
 .align
 @ can allocate as an array
@@ -17,7 +17,8 @@ incoming_buffer: .space 62
 
 @ One strategy is to keep a variable that lets you know the size of the buffer.
 incoming_counter: .byte 62
-terminator: .asciz "#"
+
+
 .text
 @ define text
 
@@ -31,13 +32,16 @@ main:
 	BL initialise_power
 	BL enable_peripheral_clocks
 	BL enable_uart4
+	BL enable_usart1
 
-	LDR R4, =terminator
-    LDRB R5, [R4]
+	LDR R5, =terminator					 @Load Terminating character address
+    LDRB R5, [R5]						 @Load the value of R5
+
 	@ To read in data, we need to use a memory buffer to store the incoming bytes
 	@ Get pointers to the buffer and counter memory areas
 	LDR R6, =incoming_buffer
 	LDR R7, =incoming_counter
+
 	@ dereference the memory for the maximum buffer size, store it in R7
 	LDRB R7, [R7]
 
@@ -65,8 +69,8 @@ loop_forever:
 	STRB R3, [R6, R8]
 	ADD R8, #1
 
-	CMP R3, R5
-    BEQ found_terminator
+	CMP R3, R5                           @ Compare received character with '*' - Terminating character
+    BEQ found_terminator                 @ If terminator received, jump to transmit
 
 	CMP R7, R8
 	BGT no_reset
@@ -92,25 +96,14 @@ clear_error:
 	B loop_forever
 
 found_terminator:
-    LDR R4, =GPIOE
-    MOV R5, #0xFF
-    STRB R5, [R4, #ODR + 1]
-    B .
+	MOV R9, R8
+	B tx_loop
 
-/*
+
 tx_loop:
 
 	@ the base address for the register to set up UART
-	LDR R0, =UART
-
-	@ load the memory addresses of the buffer and length information
-	LDR R3, =tx_string
-	LDR R4, =tx_length
-
-	@ dereference the length variable
-	@ notice how memory address R4 is replaced by the value that was at that memory address
-	LDR R4, [R4]
-
+	LDR R0, =USART1
 
 tx_uart:
 
@@ -122,12 +115,12 @@ tx_uart:
 	BEQ tx_uart
 
 	@ load the next value in the string into the transmit buffer for the specified UART
-	LDRB R5, [R3], #1
-	STRB R5, [R0, USART_TDR]
+	LDRB R3, [R6], #1
+	STRB R3, [R0, USART_TDR]
 
 	@ note the use of the S on the end of the SUBS, this means that the register flags are set
 	@ and this subtraction can be used to make a branch
-	SUBS R4, #1
+	SUBS R9, #1
 
 	@ keep looping while there are more characters to send
 	BGT tx_uart
@@ -137,7 +130,7 @@ tx_uart:
 
 	@ loop back to the start
 	B tx_loop
-*/
+
 
 @ a very simple delay
 @ you will need to find better ways of doing this
@@ -150,6 +143,3 @@ delay_inner:
 	SUBS R9, #1
 	BGT delay_inner
 	BX LR @ return from function call
-
-
-

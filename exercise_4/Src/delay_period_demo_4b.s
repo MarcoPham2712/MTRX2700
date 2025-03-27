@@ -5,7 +5,13 @@
 .text
 
 delay_4b:
+@ Initialize the board TIM and other components.
+    BL initialise_system
+    B Delay_Loop_Function_b
+
 @ The initialization Settings enable and initialize some of the functions on the STM32 board
+initialise_system:
+    PUSH {LR}
     BL enable_timer2_clock        	@ Initializes and enables the TIM2
     BL enable_peripheral_clocks   	@ Initializes and peripheral clocks
     BL initialise_discovery_board 	@ Initialize the board
@@ -26,7 +32,8 @@ delay_4b:
 
 @ Setting the trigger_prescaler function
 	BL trigger_prescaler
-
+    POP {LR}
+    BX LR
 @ The main loop logic of the delay equation operates as follows: first, the system
 @ sets the delay parameters, then executes the delay. When the system detects the
 @ specified delay time, it triggers the LED control. The LED's blinking frequency
@@ -48,10 +55,8 @@ Delay_Parameter_Setting_function_b:
 Delay_Function_b:
     LDR R3, [R0,TIM_CNT]          	@ Load current value of TIM2 counter into R3
     CMP R3, R1                    	@ Compare the delay value
-    BCC Delay_Function_b            	@ When the current value < Delay value,return to Delay_Function and wait
+    BCC Delay_Function_b            @ When the current value < Delay value,return to Delay_Function and wait
     BX LR
-
-
 
 @Set the LEDon function
 LED_on_b:
@@ -59,7 +64,7 @@ LED_on_b:
     LDR R0, =GPIOE
     STR R4, [R0,#ODR + 1]
     BL Delay_Parameter_Setting_function_b
-	B LED_off_b                     	@ Jump to the LED_off function
+	B LED_off_b                     @ Jump to the LED_off function
 
 @Set the LEDoff function
 LED_off_b:
@@ -67,5 +72,5 @@ LED_off_b:
     LDR R0, =GPIOE
     STR R4, [R0,#ODR + 1]
     BL Delay_Parameter_Setting_function_b
-	B LED_on_b                      	@ Jump to the LED_on function
+	B LED_on_b                      @ Jump to the LED_on function
 
