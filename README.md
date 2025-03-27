@@ -136,7 +136,9 @@ In order to achieve a more accurate and fully hardware-controlled delay function
 Board 1: Ben
 Board 2: Johnathan
 ```
-Combined the existing functions from the above exercises with minor additions such as using the stack, working around terminating characters and integrating delays to achieve the given task.
+Combined the existing functions from the above exercises with minor additions such as using the stack, working around terminating characters and integrating delays. The code works in two parts where the first board receives a string from the PC and then deciphers if it is a palindrome or not. If the string is a palindrome it is then Caesar ciphered and then transmitted to the other board, if it is not a palindrome it is just transmitted. The second board then receives the string and deciphers it if it is a palindrome and then displays both the number of vowels and consonants in binary using a delay in the toggling of the LEDs. 
+
+
 **Workspace Preparation:** Johnathan
 *(copy files into 1 project, delete all main functions)*
 
