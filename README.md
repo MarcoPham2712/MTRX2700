@@ -95,12 +95,53 @@ Part E: Marco
 ```
 We create functions to perform serial communication via UART. These include transmit, receive and echo functions which we use to create a communication interface between two boards.
 
+#### 3a.
+Summary: Transmit a string via UART
+Usage:
+Testing:
+
+#### 3b.
+Summary: Receive a string via UART
+Usage:
+Testing:
+
+#### 3c.
+Summary: Selecting microcontroller clock speed and baud rate
+Usage:
+Testing:
+
+#### 3d.
+Summary: Combines parts a and b into a single program
+Usage:
+Testing:
+
+#### 3e.
+Summary: Communication between two boards via UART
+Usage:
+Testing:
+
 ### Exercise 4 Hardware Timers
 ```
 Part A: Shirui
 Part B: Shirui
 Part C: Shirui
 ```
+We investigate 3 ways to implement a timer using both software and hardware and display the timer working using the board's LEDs.
+
+#### 4a.
+Summary: Software delay by passing a value (in microseconds) to a timer
+Usage:
+Testing:
+
+#### 4b.
+Summary: Demonstration of a 0.1ms delay
+Usage:
+Testing:
+
+#### 4c.
+Summary: Hardware delay
+Usage:
+Testing:
 
 ### Exercise 5 Integration
 ```
@@ -111,3 +152,12 @@ Combined the existing functions from the above exercises with minor additions su
 **Workspace Preparation:** Johnathan
 *(copy files into 1 project, delete all main functions)*
 
+#### Board 1
+Summary:
+Usage:
+Testing:
+
+#### Board 2
+Summary:
+Usage:
+Testing:
