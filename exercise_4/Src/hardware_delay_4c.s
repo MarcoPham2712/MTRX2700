@@ -41,14 +41,4 @@ LED_off_c:
     BL delayfunction              	@ Return to the delayfunction
 	B LED_on
 
-@ Delay equation
-delayfunction:
-    LDR R0, =TIM2                 	@ Loads the base address of the Timer2 to R0
-wait_loop:
-    LDR R1, [R0, #TIM_SR]         	@ Load the Timer 2 Status Register (TIM_SR) into R1
-    TST R1, #1                    	@ Test if the Update Interrupt Flag (UIF) is set
-    BEQ wait_loop                 	@ Continue to wait
-    MOV R2, #0                    	@ Clear the value of the UIF flag
-    STR R2, [R0, #TIM_SR]
-    BX LR
 

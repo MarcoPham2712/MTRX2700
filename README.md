@@ -87,13 +87,29 @@ Provide multiple strings with random uppercases (shows case-insensitive) and non
 
 ### Exercise 3 Serial Communication
 ```
-Part A: Marco
+Part A: Marco, Shirui
 Part B: Marco, Shirui, Johnathan
-Part C: Shirui
+Part C: Marco，Shirui
 Part D: Marco, Shirui
-Part E: Marco
+Part E: Marco, Shirui
 ```
 We create functions to perform serial communication via UART. These include transmit, receive and echo functions which we use to create a communication interface between two boards.
+
+#### 3a. 
+Summary: In task 3a, we will try to transmit the given string provided to the interface, here we are using Putty for Windows. This string will only be transmitted through when the user pressed the button so we are implementing 2 sub-functions: checking if the button is pressed or not and transmitting the data from the given string to Putty. There is also a terminating character to determine whether the string is ended or not. We will call this function as “transmit function”
+
+#### 3b
+Summary: In this task we are requested to read the string given in the interface(Putty) and store it inside the STM32 using UART. This function is called the “receive function”. The process is the same as part a, with the exact requirement except the button. 
+
+#### 3c
+Summary: In this part, we will modify our code in part a to include the “change_clock_speed” function which is provided through the lecture. This function is made so that the frequency of the board is multiplied by 6 times. Therefore, the baud rate needed to be changed to the new value as well.
+
+#### 3d
+Summary: Here, we will integrate part a and b and make a function so that, whenever we type in something on the interface, it will receive and store in the board. Then it will be re-transmitted again to the interface. With the exact requirement provided in part a and b, we also include a function to tell “Successful” when the string is received - transmitted successfully. 
+
+#### 3e
+Summary: From part d, we will put everything together to communicate between 2 computers through 2 STM32 boards. It will use the program enhanced from pard d to receive and transmit string between computer - board. And we will use the pin - determined by the Hardware Document to transmit the data between 2 boards. The result is expected as whenever something is typed in Computer 1, it will transmit through the boards and show up in Computer 2, working as a text message. Moreover, the task also requires one of the ports to be USART for further using. 
+
 
 ### Exercise 4 Hardware Timers
 ```
@@ -101,6 +117,21 @@ Part A: Shirui
 Part B: Shirui
 Part C: Shirui
 ```
+In this task, the Hardware Timers of the STM32 microcontroller must be used for the precise implementation of the delay and timing functions. The delay function is achieved by configuring the relevant register parameters of timer. These precise delays enable the control of hardware cycles, such as the lighting of LEDs, timed transmissions, etc.
+#### 4a.
+Summary: 
+In task 4a, the program is required to initialise the TIM2 timer and GPIO clock, and to configure GPIOE to LED output mode. The prescaler of TIM2 should be set so that the counting frequency is 8MHz / (prescaler value + 1). Finally, the count value should be set according to this frequency in order to achieve one full count within one second. Finally, the LED blinks once per second through the delay cycle to achieve precise control of the timer.
+
+#### 4b.
+Summary: 
+The program under discussion is based on the STM32 microcontroller, which has a system clock frequency of 8MHz. The actual counting frequency of the timer is reduced by configuring the prescaler of the timer. In order to achieve 10,000 counts in 1 second by counting every 0.1 milliseconds, the prescaler should be set to 799, which reduces the counting frequency to 10,000 Hz (i.e., one count every 0.1ms). The delay effect of one second is achieved by setting the comparison value of the timer and polling to check the status of the timer, thus finally determining whether 10,000 counts have been reached.
+
+
+#### 4c.
+Summary: 
+In order to achieve a more accurate and fully hardware-controlled delay function, it is necessary to use the auto reload mechanism of the STM32 timer. Initially, the prescaler (TIM_PSC) and the auto-reload register (TIM_ARR) must be configured, and the auto-reload function (ARPE=1) must be enabled, thereby ensuring that the timer automatically resets to 0 once the count reaches the predetermined value. After starting the timer, the program simply detects the UIF bit in the status register (TIM_SR) to determine if an update event has occurred. Once UIF is set, it means that a timing cycle has been completed, and then you can execute the required delay action and clear UIF.
+
+
 
 ### Exercise 5 Integration
 ```
