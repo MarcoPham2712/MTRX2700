@@ -301,16 +301,14 @@ receive_string:
  800028a:	d116      	bne.n	80002ba <clear_error>
 		TST R1, 1 << USART_ISR_RXNE_BIT
  800028c:	f011 0f20 	tst.w	r1, #32
-
-
-	LDR R3, =0b00001111
- 8000290:	f04f 030f 	mov.w	r3, #15
-	BL set_led_state
- 8000294:	f000 f81c 	bl	80002d0 <set_led_state>
-
 		BEQ receive_until_terminator
- 8000298:	d0f4      	beq.n	8000284 <receive_until_terminator>
+ 8000290:	d0f8      	beq.n	8000284 <receive_until_terminator>
 
+
+	LDR R7, =0b00001111
+ 8000292:	f04f 070f 	mov.w	r7, #15
+	BL set_led_state
+ 8000296:	f000 f81b 	bl	80002d0 <set_led_state>
 
 		// Load received byte from receive data register and check for terminator
 		LDRB R2, [R0, USART_RDR]
@@ -390,8 +388,8 @@ set_led_state:
 	// Replace GPIOE ODR with R3 bitmask
 	LDR R1, =GPIOE
  80002d0:	4919      	ldr	r1, [pc, #100]	@ (8000338 <main+0x1a>)
-	STRB R3, [R1, #GPIO_ODR + 1]
- 80002d2:	754b      	strb	r3, [r1, #21]
+	STRB R7, [R1, #GPIO_ODR + 1]
+ 80002d2:	754f      	strb	r7, [r1, #21]
 	BX LR
  80002d4:	4770      	bx	lr
 
@@ -414,8 +412,8 @@ port_forward_b2:
 	BL Set_LED_to_output
  80002ee:	f7ff ffe9 	bl	80002c4 <Set_LED_to_output>
 
-	LDR R3, =0b00000001
- 80002f2:	f04f 0301 	mov.w	r3, #1
+	LDR R7, =0b00000001
+ 80002f2:	f04f 0701 	mov.w	r7, #1
 	BL set_led_state
  80002f6:	f7ff ffeb 	bl	80002d0 <set_led_state>
 
@@ -446,8 +444,8 @@ port_forward_b2:
 	STRB R2, [R1, R0]
  8000312:	540a      	strb	r2, [r1, r0]
 
-	LDR R3, =0b11111111
- 8000314:	f04f 03ff 	mov.w	r3, #255	@ 0xff
+	LDR R7, =0b11111111
+ 8000314:	f04f 07ff 	mov.w	r7, #255	@ 0xff
 	BL set_led_state
  8000318:	f7ff ffda 	bl	80002d0 <set_led_state>
 

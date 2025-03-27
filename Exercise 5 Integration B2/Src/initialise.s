@@ -28,7 +28,8 @@ trigger_prescaler_partc:
 @ set the maximum count for the timer
 @ store a value for the prescaler
 	LDR R0, =TIM2	             @ Load the base address for the timer
-	LDR R1, =10000000             @ Make the timer overflow after counting to only 1
+	LDR R1, =4000000             @ Make the timer overflow after counting to only 1
+								 // (500ms = 1 / 2 s = 4M / 8M s)
 	STR R1, [R0, TIM_ARR]        @ Set the ARR register
 	LDR R8, =0x00
 	STR R8, [R0, TIM_CNT]        @ Reset the clock

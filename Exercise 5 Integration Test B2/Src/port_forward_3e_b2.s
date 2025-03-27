@@ -26,7 +26,7 @@ Set_LED_to_output:
 set_led_state:
 	// Replace GPIOE ODR with R3 bitmask
 	LDR R1, =GPIOE
-	STRB R3, [R1, #GPIO_ODR + 1]
+	STRB R7, [R1, #GPIO_ODR + 1]
 	BX LR
 
 port_forward_b2:
@@ -39,7 +39,7 @@ port_forward_b2:
 	BL finalise_uart4_config
 	BL Set_LED_to_output
 
-	LDR R3, =0b00000001
+	LDR R7, =0b00000001
 	BL set_led_state
 
 
@@ -58,7 +58,7 @@ port_forward_b2:
 	MOV R2, #0
 	STRB R2, [R1, R0]
 
-	LDR R3, =0b11111111
+	LDR R7, =0b11111111
 	BL set_led_state
 
 	finished:

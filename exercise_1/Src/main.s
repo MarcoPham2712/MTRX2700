@@ -18,6 +18,7 @@
 
 hello_world_string: .asciz "Hello World"
 palindrome_string: .asciz ".raceCAR."
+converted_hello_world_string: .asciz "                "
 
 // Tested with large positive and negative values
 cipher_key: .byte 3
@@ -34,7 +35,10 @@ cipher_string_2: .asciz "..--Aa"
 
 main:
 	// Test 1a
-	// B case_converter
+	LDR R0, =0
+	LDR R1, =hello_world_string
+	LDR R2, =converted_hello_world_string
+	B case_converter_run
 
 	// Test 1b
 	LDR R1, =hello_world_string

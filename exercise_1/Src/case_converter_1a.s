@@ -6,13 +6,14 @@ ascii_string:  .asciz "EntP\0"    @ string (null-terminated)
 string_buffer: .space 10          @ string buffer for the converted string
 
 .text
-case_converter:
+
+case_converter_setup_and_run:
     LDR   R0, =0                  @ 1 = convert to uppercase  0 = convert to lowercase
     LDR   R1, =ascii_string
     LDR   R2, =string_buffer
-    MOV   R3, #0                  @ R3 is the index pointer starts at 0
 
-loop:
+case_converter_run:
+    MOV   R3, #0                  @ R3 is the index pointer starts at 0
     CMP   R0, #1                  @ Check the mode
     BEQ   Uppercase
     B     Lowercase
@@ -31,7 +32,7 @@ Uppercase:
 store_ucha:
     STRB  R4, [R2, R3]            @ Store the (converted) character in the destination
     ADD   R3, #1                  @ Move the index to the next character
-    B     loop
+    B     Uppercase
 
 Lowercase:
     LDRB  R4, [R1, R3]            @ Load one character from the source into R4
@@ -47,7 +48,7 @@ Lowercase:
 store_lcha:
     STRB  R4, [R2, R3]
     ADD   R3, #1                  @ Move the index to the next character
-    B     loop
+    B     Lowercase
 
 finish:
     MOV   R4, #0

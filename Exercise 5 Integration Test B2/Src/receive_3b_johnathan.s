@@ -66,7 +66,7 @@ receive_string:
 		BEQ receive_until_terminator
 
 
-	LDR R3, =0b00001111
+	LDR R7, =0b00001111
 	BL set_led_state
 
 		// Load received byte from receive data register and check for terminator
