@@ -115,8 +115,9 @@ timer_enable_peripheral_clocks:
 @ store a value for the prescaler
 	LDR R0, =TIM2	             @ Load the base address for the timer
  80001ec:	f04f 4080 	mov.w	r0, #1073741824	@ 0x40000000
-	LDR R1, =10000000             @ Make the timer overflow after counting to only 1
+	LDR R1, =4000000             @ Make the timer overflow after counting to only 1
  80001f0:	49a0      	ldr	r1, [pc, #640]	@ (8000474 <display_loop+0x1c>)
+								 // (500ms = 1 / 2 s = 4M / 8M s)
 	STR R1, [R0, TIM_ARR]        @ Set the ARR register
  80001f2:	62c1      	str	r1, [r0, #44]	@ 0x2c
 	LDR R8, =0x00
@@ -767,6 +768,7 @@ wait_loop:
  8000410:	f011 0f01 	tst.w	r1, #1
     BEQ wait_loop                 	@ Continue to wait
  8000414:	d0fb      	beq.n	800040e <wait_loop>
+
     MOV R2, #0                    	@ Clear the value of the UIF flag
  8000416:	f04f 0200 	mov.w	r2, #0
     STR R2, [R0, #TIM_SR]
@@ -868,8 +870,8 @@ main:
  800046e:	0000      	.short	0x0000
 	LDR R0, =RCC	             @ Load the base address for the timer
  8000470:	40021000 	.word	0x40021000
-	LDR R1, =10000000             @ Make the timer overflow after counting to only 1
- 8000474:	00989680 	.word	0x00989680
+	LDR R1, =4000000             @ Make the timer overflow after counting to only 1
+ 8000474:	003d0900 	.word	0x003d0900
 	LDR R0, =GPIOC
  8000478:	48000800 	.word	0x48000800
 	LDR R0, =UART @ the base address for the register to turn clocks on/off

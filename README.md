@@ -89,7 +89,7 @@ Provide multiple strings with random uppercases (shows case-insensitive) and non
 ```
 Part A: Marco, Shirui
 Part B: Marco, Shirui, Johnathan
-Part C: Marco，Shirui
+Part C: Marco, Shirui
 Part D: Marco, Shirui
 Part E: Marco, Shirui
 ```
@@ -109,7 +109,6 @@ Summary: Here, we will integrate part a and b and make a function so that, whene
 
 #### 3e
 Summary: From part d, we will put everything together to communicate between 2 computers through 2 STM32 boards. It will use the program enhanced from pard d to receive and transmit string between computer - board. And we will use the pin - determined by the Hardware Document to transmit the data between 2 boards. The result is expected as whenever something is typed in Computer 1, it will transmit through the boards and show up in Computer 2, working as a text message. Moreover, the task also requires one of the ports to be USART for further using. 
-
 
 ### Exercise 4 Hardware Timers
 ```
@@ -132,7 +131,6 @@ Summary:
 In order to achieve a more accurate and fully hardware-controlled delay function, it is necessary to use the auto reload mechanism of the STM32 timer. Initially, the prescaler (TIM_PSC) and the auto-reload register (TIM_ARR) must be configured, and the auto-reload function (ARPE=1) must be enabled, thereby ensuring that the timer automatically resets to 0 once the count reaches the predetermined value. After starting the timer, the program simply detects the UIF bit in the status register (TIM_SR) to determine if an update event has occurred. Once UIF is set, it means that a timing cycle has been completed, and then you can execute the required delay action and clear UIF.
 
 
-
 ### Exercise 5 Integration
 ```
 Board 1: Ben
@@ -144,3 +142,12 @@ Combined the existing functions from the above exercises with minor additions su
 **Workspace Preparation:** Johnathan
 *(copy files into 1 project, delete all main functions)*
 
+#### Board 1
+Summary:
+Usage:
+Testing:
+
+#### Board 2
+Summary:
+Usage:
+Testing:

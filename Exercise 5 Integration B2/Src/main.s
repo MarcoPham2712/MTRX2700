@@ -33,6 +33,7 @@ wait_loop:
     LDR R1, [R0, #TIM_SR]         	@ Load the Timer 2 Status Register (TIM_SR) into R1
     TST R1, #1                    	@ Test if the Update Interrupt Flag (UIF) is set
     BEQ wait_loop                 	@ Continue to wait
+
     MOV R2, #0                    	@ Clear the value of the UIF flag
     STR R2, [R0, #TIM_SR]
     BX LR
@@ -45,8 +46,6 @@ main:
 	BL timer_enable_peripheral_clocks
 	BL trigger_prescaler_partc
 	BL enable_arpe
-	// TODO add support for serial via pins
-	// TODO add timer initialisation
 
 // It's called a program loop but we never added functionality to reset
 // back to here, so in reality its only called once

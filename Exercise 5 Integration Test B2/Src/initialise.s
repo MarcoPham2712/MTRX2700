@@ -2,34 +2,93 @@
 .thumb
 
 #include "definitions.s"
-@ function to enable the clocks for the peripherals we could be using (A, B, C, D and E)
+
+// Enable peripheral clocks for ports A, C, E via the Reset and Clock Control (RCC)
 enable_peripheral_clocks:
-
-	@ load the address of the RCC address boundary (for enabling the IO clock)
+	// Load AHB EN Register
 	LDR R0, =RCC
+	LDR R1, [R0, #RCC_AHBENR]
 
-	@ enable all of the GPIO peripherals in AHBENR
-	LDR R1, [R0, #AHBENR]
-	ORR R1, 1 << GPIOE_ENABLE | 1 << GPIOD_ENABLE | 1 << GPIOC_ENABLE | 1 << GPIOB_ENABLE | 1 << GPIOA_ENABLE  @ enable GPIO
-	STR R1, [R0, #AHBENR]
+	// Enable Clocks for Ports A, C, E
+	ORR R1, 1 << GPIOE_ENABLE | 1 << GPIOC_ENABLE | 1 << GPIOA_ENABLE
+	STR R1, [R0, #RCC_AHBENR]
 
-	BX LR @ return
+	BX LR
 
-@ initialise the discovery board I/O (just outputs: inputs are selected by default)
-initialise_discovery_board:
-	LDR R0, =GPIOE 	@ load the address of the GPIOE register into R0
-	LDR R1, =0x5555  @ load the binary value of 01 (OUTPUT) for each port in the upper two bytes
-					 @ as 0x5555 = 01010101 01010101
-	STRH R1, [R0, #MODER + 2]   @ store the new register values in the top half word representing
-								@ the MODER settings for pe8-15
-	BX LR @ return from function call
+// Enable USART1 and UART4 Clocks
+enable_usart1_uart4_clocks:
+	// Load APB2 EN Register and enable USART1 clock
+	LDR R0, = RCC
+	LDR R1, [R0, #RCC_APB2ENR]
+	ORR R1, 1 << USART1_EN_BIT
+	STR R1, [R0, #RCC_APB2ENR]
 
+	// Load APB1 EN Register and enable UART4 clock
+	LDR R1, [R0, #RCC_APB1ENR]
+	ORR R1, 1 << UART4_EN_BIT
+	STR R1, [R0, #RCC_APB1ENR]
 
-@ function to enable a UART device - this requires:
-@  setting the alternate pin functions for the UART (select the pins you want to use)
-@
+	BX LR
+
+// Configure UART4 to work with PC10 (Tx) and PC11 (Rx)
+use_uart4_pin_config:
+	// Load GPIOC base address
+	LDR R0, =GPIOC
+
+	// Load GPIOC AF Register (High) and set alternate function type AF5 for ports
+	LDR R1, [R0, #GPIO_AFRH]
+	ORR R1, 0b0101 << 11
+	ORR R1, 0b0101 << 7
+	STR R1, [R0, #GPIO_AFRH]
+
+	// Load GPIOC MODE Register and set Alternate Function mode for ports
+	LDR R1, [R0, #GPIO_MODER]
+	ORR R1, 0b10 << 21
+	ORR R1, 0b10 << 19
+	STR R1, [R0, #GPIO_MODER]
+
+	// Load GPIOC O SPEED Register and set bits to use high speed for ports
+	LDR R1, [R0, #GPIO_OSPEEDR]
+	ORR R1, 0b11 << 21
+	ORR R1, 0b11 << 19
+	STR R1, [R0, #GPIO_OSPEEDR]
+
+	BX LR
+
+// Configure UART4 parameters
+configure_uart4:
+	// Load UART4 base address
+	LDR R0, =UART4
+
+	// Set Baud Rate
+	LDR R1, [R0, #USART_BRR]
+	// TODO
+	STR R1, [R0, #USART_BRR]
+
+	// Enable receiver, transmitter
+	LDR R1, [R0, #USART_CR1]
+	ORR R1, 1 << USART_CR1_RE_BIT | 1 << USART_CR1_TE_BIT
+	STR R1, [R0, #USART_CR1]
+
+	BX LR
+
+// Enable UART4
+finalise_uart4_config:
+	// Load UART4 base address
+	LDR R0, =UART4
+
+	// Enable UART4
+	LDR R1, [R0, #USART_CR1]
+	ORR R1, 1 << USART_CR1_UE_BIT
+	STR R1, [R0, #USART_CR1]
+
+	BX LR
+
+/*
+@ Function to enable a UART device - this requires:
+@ Setting the alternate pin functions for the UART (select the pins you want to use)
 @ BAUD rate needs to change depending on whether it is 8MHz (external clock) or 24MHz (our PLL setting)
-enable_uart:
+enable_usart1:
 	@make a note about the different ways that we set specific bits in this configuration section
 	@ select which UART you want to enable
 	LDR R0, =GPIOC
@@ -49,15 +108,52 @@ enable_uart:
 	@ you can find this out by looking in the datasheet
 	LDR R0, =RCC @ the base address for the register to turn clocks on/off
 	LDR R1, [R0, #APB2ENR] @ load the original value from the enable register
-	ORR R1, 1 << UART_EN  @ apply the bit mask to the previous values of the enable the UART
+	ORR R1, 1 << USART1_EN  @ apply the bit mask to the previous values of the enable the UART
 	STR R1, [R0, #APB2ENR] @ store the modified enable register values back to RCC
 	@ this is the baud rate
 	MOV R1, #0x46 @ from our earlier calculations (for 8MHz), store this in register R1
-	LDR R0, =UART @ the base address for the register to turn clocks on/off
+	LDR R0, =USART1 @ the base address for the register to turn clocks on/off
 	STRH R1, [R0, #USART_BRR] @ store this value directly in the first half word (16 bits) of
 							  	 @ the baud rate register
 	@ we want to set a few things here, lets define their bit positions to make it more readable
-	LDR R0, =UART @ the base address for the register to set up the specified UART
+	LDR R0, =USART1 @ the base address for the register to set up the specified UART
+	LDR R1, [R0, #USART_CR1] @ load the original value from the enable register
+	ORR R1, 1 << UART_TE | 1 << UART_RE | 1 << UART_UE @ make a bit mask with a '1' for the bits to enable,
+ @ apply the bit mask to the previous values of the enable register
+	STR R1, [R0, #USART_CR1] @ store the modified enable register values back to RCC
+	BX LR @ return
+
+
+
+enable_uart4:
+	@make a note about the different ways that we set specific bits in this configuration section
+	@ select which UART you want to enable
+	LDR R0, =GPIOC
+	@ set the alternate function for the UART pins (what ever you have selected)
+	LDR R1, =0x55
+	STRB R1, [R0, AFRH + 1]
+	@ modify the mode of the GPIO pins you want to use to enable 'alternate function mode'
+	LDR R1, [R0, GPIO_MODER]
+	ORR R1, 0xA00 @ Mask for pins to change to 'alternate function mode'
+	STR R1, [R0, GPIO_MODER]
+	@ modify the speed of the GPIO pins you want to use to enable 'high speed'
+	LDR R1, [R0, GPIO_OSPEEDR]
+	ORR R1, 0xF00 @ Mask for pins to be set as high speed
+	STR R1, [R0, GPIO_OSPEEDR]
+	@ Set the enable bit for the specific UART you want to use
+	@ Note: this might be in APB1ENR or APB2ENR
+	@ you can find this out by looking in the datasheet
+	LDR R0, =RCC @ the base address for the register to turn clocks on/off
+	LDR R1, [R0, #APB1ENR] @ load the original value from the enable register
+	ORR R1, 1 << UART4_EN  @ apply the bit mask to the previous values of the enable the UART
+	STR R1, [R0, #APB1ENR] @ store the modified enable register values back to RCC
+	@ this is the baud rate
+	MOV R1, #0x46 @ from our earlier calculations (for 8MHz), store this in register R1
+	LDR R0, =UART4 @ the base address for the register to turn clocks on/off
+	STRH R1, [R0, #USART_BRR] @ store this value directly in the first half word (16 bits) of
+							  	 @ the baud rate register
+	@ we want to set a few things here, lets define their bit positions to make it more readable
+	LDR R0, =UART4 @ the base address for the register to set up the specified UART
 	LDR R1, [R0, #USART_CR1] @ load the original value from the enable register
 	ORR R1, 1 << UART_TE | 1 << UART_RE | 1 << UART_UE @ make a bit mask with a '1' for the bits to enable,
  @ apply the bit mask to the previous values of the enable register
@@ -78,7 +174,6 @@ wait_for_HSERDY:
 	LDR R1, [R0, #RCC_CR] @ load the original value from the enable register
 	TST R1, 1 << HSERDY @ Test the HSERDY bit (check if it is 1)
 	BEQ wait_for_HSERDY
-
 @ step 2, now the clock is HSE, we are allowed to switch to PLL
 	@ clock is set to External clock (external crystal) - 8MHz, can enable the PLL now
 	LDR R1, [R0, #RCC_CFGR] @ load the original value from the enable register
@@ -96,7 +191,6 @@ wait_for_PLLRDY:
 	LDR R1, [R0, #RCC_CR] @ load the original value from the enable register
 	TST R1, 1 << PLLRDY @ Test the HSERDY bit (check if it is 1)
 	BEQ wait_for_PLLRDY
-
 @ step 3, PLL is ready, switch over the system clock to PLL
 	LDR R0, =RCC  @ load the address of the RCC address boundary (for enabling the IO clock)
 	LDR R1, [R0, #RCC_CFGR]  @ load the current value of the peripheral clock registers
@@ -109,9 +203,10 @@ wait_for_PLLRDY:
 	STR R1, [R0, #RCC_CFGR]  @ store the modified register back to the submodule
 	BX LR @ return
 
+*/
 @ initialise the power systems on the microcontroller
 @ PWREN (enable power to the clock), SYSCFGEN system clock enable
-initialise_power:
+enable_power:
 	LDR R0, =RCC @ the base address for the register to turn clocks on/off
 	@ enable clock power in APB1ENR
 	LDR R1, [R0, #APB1ENR]
@@ -122,4 +217,3 @@ initialise_power:
 	ORR R1, 1 << SYSCFGEN @ apply the bit mask to allow clock configuration
 	STR R1, [R0, #APB2ENR]
 	BX LR @ return
-
