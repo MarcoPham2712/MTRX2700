@@ -95,6 +95,22 @@ Part E: Marco, Shirui
 ```
 We create functions to perform serial communication via UART. These include transmit, receive and echo functions which we use to create a communication interface between two boards.
 
+3a. 
+Summary: In task 3a, we will try to transmit the given string provided to the interface, here we are using Putty for Windows. This string will only be transmitted through when the user pressed the button so we are implementing 2 sub-functions: checking if the button is pressed or not and transmitting the data from the given string to Putty. There is also a terminating character to determine whether the string is ended or not. We will call this function as “transmit function”
+
+3b
+Summary: In this task we are requested to read the string given in the interface(Putty) and store it inside the STM32 using UART. This function is called the “receive function”. The process is the same as part a, with the exact requirement except the button. 
+
+3c
+Summary: In this part, we will modify our code in part a to include the “change_clock_speed” function which is provided through the lecture. This function is made so that the frequency of the board is multiplied by 6 times. Therefore, the baud rate needed to be changed to the new value as well.
+
+3d
+Summary: Here, we will integrate part a and b and make a function so that, whenever we type in something on the interface, it will receive and store in the board. Then it will be re-transmitted again to the interface. With the exact requirement provided in part a and b, we also include a function to tell “Successful” when the string is received - transmitted successfully. 
+
+3e
+Summary: From part d, we will put everything together to communicate between 2 computers through 2 STM32 boards. It will use the program enhanced from pard d to receive and transmit string between computer - board. And we will use the pin - determined by the Hardware Document to transmit the data between 2 boards. The result is expected as whenever something is typed in Computer 1, it will transmit through the boards and show up in Computer 2, working as a text message. Moreover, the task also requires one of the ports to be USART for further using. 
+
+
 ### Exercise 4 Hardware Timers
 ```
 Part A: Shirui
