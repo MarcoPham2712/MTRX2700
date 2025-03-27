@@ -18,4 +18,4 @@
 .equ ODR, 0x14	@ GPIO output register
 .equ IDR, 0x10	@ GPIO input register
 
-.equ START, 0b10101010
+.equ START, 0b10101011

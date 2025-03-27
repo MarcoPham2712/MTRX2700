@@ -7,43 +7,43 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   1 .text         00000268  08000194  08000194  00001194  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       00000000  080003fc  080003fc  00002008  2**0
+  2 .rodata       00000000  080003fc  080003fc  00002010  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  3 .ARM.extab    00000000  080003fc  080003fc  00002008  2**0
+  3 .ARM.extab    00000000  080003fc  080003fc  00002010  2**0
                   CONTENTS, READONLY
-  4 .ARM          00000000  080003fc  080003fc  00002008  2**0
+  4 .ARM          00000000  080003fc  080003fc  00002010  2**0
                   CONTENTS, READONLY
-  5 .preinit_array 00000000  080003fc  080003fc  00002008  2**0
+  5 .preinit_array 00000000  080003fc  080003fc  00002010  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   6 .init_array   00000004  080003fc  080003fc  000013fc  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   7 .fini_array   00000004  08000400  08000400  00001400  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  8 .data         00000008  20000000  08000404  00002000  2**0
+  8 .data         00000010  20000000  08000404  00002000  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .ccmram       00000000  10000000  10000000  00002008  2**0
+  9 .ccmram       00000000  10000000  10000000  00002010  2**0
                   CONTENTS
- 10 .bss          0000001c  20000008  20000008  00002008  2**2
+ 10 .bss          0000001c  20000010  20000010  00002010  2**2
                   ALLOC
- 11 ._user_heap_stack 00000604  20000024  20000024  00002008  2**0
+ 11 ._user_heap_stack 00000604  2000002c  2000002c  00002010  2**0
                   ALLOC
- 12 .ARM.attributes 00000030  00000000  00000000  00002008  2**0
+ 12 .ARM.attributes 00000030  00000000  00000000  00002010  2**0
                   CONTENTS, READONLY
- 13 .debug_line   00000188  00000000  00000000  00002038  2**0
+ 13 .debug_line   00000188  00000000  00000000  00002040  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_line_str 000000c8  00000000  00000000  000021c0  2**0
+ 14 .debug_line_str 000000c8  00000000  00000000  000021c8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_info   00000055  00000000  00000000  00002288  2**0
+ 15 .debug_info   00000055  00000000  00000000  00002290  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_abbrev 00000038  00000000  00000000  000022dd  2**0
+ 16 .debug_abbrev 00000038  00000000  00000000  000022e5  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_aranges 00000048  00000000  00000000  00002318  2**3
+ 17 .debug_aranges 00000048  00000000  00000000  00002320  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00000096  00000000  00000000  00002360  2**0
+ 18 .debug_str    00000096  00000000  00000000  00002368  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_rnglists 00000019  00000000  00000000  000023f6  2**0
+ 19 .debug_rnglists 00000019  00000000  00000000  000023fe  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  0000002c  00000000  00000000  00002410  2**2
+ 20 .debug_frame  0000002c  00000000  00000000  00002418  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -60,7 +60,7 @@ Disassembly of section .text:
  80001a6:	2301      	movs	r3, #1
  80001a8:	7023      	strb	r3, [r4, #0]
  80001aa:	bd10      	pop	{r4, pc}
- 80001ac:	20000008 	.word	0x20000008
+ 80001ac:	20000010 	.word	0x20000010
  80001b0:	00000000 	.word	0x00000000
  80001b4:	080003e4 	.word	0x080003e4
 
@@ -73,7 +73,7 @@ Disassembly of section .text:
  80001c2:	f3af 8000 	nop.w
  80001c6:	bd08      	pop	{r3, pc}
  80001c8:	00000000 	.word	0x00000000
- 80001cc:	2000000c 	.word	0x2000000c
+ 80001cc:	20000014 	.word	0x20000014
  80001d0:	080003e4 	.word	0x080003e4
 
 080001d4 <enable_peripheral_clocks>:
@@ -135,7 +135,7 @@ Set_LED_state:
 	LDR R0, =GPIOE	            @ Load the address of the GPIOE register into R0
  80001fe:	484f      	ldr	r0, [pc, #316]	@ (800033c <main+0x14>)
 	LDRB R1, =START 		    @ load a pattern for the set of LEDs (every second one is on)
- 8000200:	f04f 01aa 	mov.w	r1, #170	@ 0xaa
+ 8000200:	f04f 01ab 	mov.w	r1, #171	@ 0xab
 	STRB R1, [R0, #ODR + 1]     @ ODR GPIO Output register
  8000204:	7541      	strb	r1, [r0, #21]
 
@@ -524,7 +524,7 @@ Add_letter:
  8000326:	e7e9      	b.n	80002fc <button_press>
 
 08000328 <main>:
-//4 vowels 13 consonants
+
 
 .text
 main:
@@ -541,7 +541,7 @@ main:
     // Test 2c (infinite loop)
     //B start_user_led_ripple
 
-    // Test 2d (infinite loop)
+    //Test 2d (infinite loop)
     LDR R0, =test_string
  8000334:	4803      	ldr	r0, [pc, #12]	@ (8000344 <main+0x1c>)
     B Vowels
@@ -644,13 +644,13 @@ LoopForever:
   ldr r0, =_sdata
  8000384:	20000000 	.word	0x20000000
   ldr r1, =_edata
- 8000388:	20000008 	.word	0x20000008
+ 8000388:	20000010 	.word	0x20000010
   ldr r2, =_sidata
  800038c:	08000404 	.word	0x08000404
   ldr r2, =_sbss
- 8000390:	20000008 	.word	0x20000008
+ 8000390:	20000010 	.word	0x20000010
   ldr r4, =_ebss
- 8000394:	20000024 	.word	0x20000024
+ 8000394:	2000002c 	.word	0x2000002c
 
 08000398 <ADC1_2_IRQHandler>:
  * @retval : None

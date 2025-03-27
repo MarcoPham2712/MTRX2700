@@ -10,7 +10,7 @@
 #include "vowels_2d.s"
 
 .data
-test_string: .asciz "abcde.fghi44jkl,mnopq1"
+test_string: .asciz "hello world"
 //4 vowels 13 consonants
 //test_string: .asciz "abbba"
 
@@ -30,6 +30,6 @@ main:
     // Test 2c (infinite loop)
     //B start_user_led_ripple
 
-    // Test 2d (infinite loop)
+    //Test 2d (infinite loop)
     LDR R0, =test_string
     B Vowels
