@@ -37,20 +37,20 @@ use_uart4_pin_config:
 
 	// Load GPIOC AF Register (High) and set alternate function type AF5 for ports
 	LDR R1, [R0, #GPIO_AFRH]
-	ORR R1, 0b0101 << 15
 	ORR R1, 0b0101 << 11
+	ORR R1, 0b0101 << 7
 	STR R1, [R0, #GPIO_AFRH]
 
 	// Load GPIOC MODE Register and set Alternate Function mode for ports
 	LDR R1, [R0, #GPIO_MODER]
-	ORR R1, 0b10 << 23
 	ORR R1, 0b10 << 21
+	ORR R1, 0b10 << 19
 	STR R1, [R0, #GPIO_MODER]
 
 	// Load GPIOC O SPEED Register and set bits to use high speed for ports
 	LDR R1, [R0, #GPIO_OSPEEDR]
-	ORR R1, 0b11 << 23
 	ORR R1, 0b11 << 21
+	ORR R1, 0b11 << 19
 	STR R1, [R0, #GPIO_OSPEEDR]
 
 	BX LR
